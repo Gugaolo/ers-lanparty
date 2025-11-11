@@ -1,65 +1,217 @@
+// app/page.tsx
 import Image from "next/image";
+import Link from "next/link";
+
+const COLORS = {
+  primary: "#005AA7",  // ERŠ modra – zamenjaj po želji
+  accent:  "#78BE20",  // ŠCV zelena – zamenjaj po želji
+  dark:    "#0B132B",
+  light:   "#F7FAFC",
+};
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main
+      className="min-h-screen text-gray-900 dark:text-white"
+      style={{
+        background:
+          `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)`,
+      }}
+    >
+      {/* NAV */}
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/ERSLogotip.png" // <- dodaj logo v /public
+            alt="ERŠ ŠCV"
+            width={40}
+            height={40}
+            priority
+          />
+          <span className="text-lg font-semibold tracking-tight">
+            ERŠ ŠCV LAN PARTY
+          </span>
+        </div>
+        <div className="hidden gap-3 sm:flex">
+          <Link href="#igre" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
+            Igre
+          </Link>
+          <Link href="#urnik" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
+            Urnik
+          </Link>
+          <Link href="#pravila" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
+            Pravila
+          </Link>
+          <Link
+            href="/prijava"
+            className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100"
+          >
+            Prijava ekipe
+          </Link>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-10 sm:grid-cols-2 sm:pt-16">
+        <div>
+          <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">
+            LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-4 max-w-xl text-white/80">
+            Turnirji, nagrade, ekipe in dobra družba. Prinesi svoj računalnik ali
+            se pridruži kot gledalec. Povezujemo elektro in računalniške navdušence
+            v srcu Velenja.
           </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/prijava"
+              className="rounded-md px-5 py-3 text-sm font-semibold text-white shadow"
+              style={{ backgroundColor: COLORS.accent }}
+            >
+              Prijavi ekipo
+            </Link>
+            <Link
+              href="#pravila"
+              className="rounded-md border border-white/30 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/10"
+            >
+              Preberi pravila
+            </Link>
+          </div>
+
+          {/* Info trak */}
+          <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-white/80">
+            <div className="rounded-md bg-white/10 px-3 py-2">Lokacija: ŠCV, Velenje</div>
+            <div className="rounded-md bg-white/10 px-3 py-2">Datum: kmalu 🎯</div>
+            <div className="rounded-md bg-white/10 px-3 py-2">Vstop: brezplačno</div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Hero ilustracija */}
+        <div className="relative h-64 w-full sm:h-96">
+          <Image
+            src="/LanPartySlika.jpg"  // dodaj poljubno ilustracijo v /public
+            alt="LAN party illustration"
+            fill
+            className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.35)]"
+            priority
+          />
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* HIGHLIGHTS */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            { title: "Ekipe in solo", desc: "Prijavi ekipo ali igraj samostojno." },
+            { title: "Več iger", desc: "CS2, Valorant, Rocket League, LoL …" },
+            { title: "Hitro omrežje", desc: "Stabilna povezava in tehnična podpora." },
+          ].map((c) => (
+            <div
+              key={c.title}
+              className="rounded-xl border border-white/15 bg-white/10 p-5 backdrop-blur"
+            >
+              <h3 className="text-lg font-semibold">{c.title}</h3>
+              <p className="mt-2 text-sm text-white/80">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* IGRE */}
+      <section id="igre" className="mx-auto max-w-6xl px-6 pb-16">
+        <h2 className="text-2xl font-bold">Igre na dogodku</h2>
+        <p className="mt-2 text-white/80">
+          Izbor aktualnih naslovov. Končni seznam objavimo po zaključku prijav.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-2">
+          {["CS2", "Valorant", "Rocket League", "League of Legends", "Fortnite"].map((g) => (
+            <span
+              key={g}
+              className="rounded-full bg-white/10 px-4 py-2 text-sm"
+            >
+              {g}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* URNIK (teaser) */}
+      <section id="urnik" className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="rounded-2xl bg-white p-6 text-gray-900 shadow-2xl sm:p-8">
+          <h2 className="text-xl font-bold">Predviden urnik</h2>
+          
+          <h3 className="mt-4 text-sm text-gray-700">1. dan</h3>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-md bg-gray-50 p-4">
+              <p className="text-sm font-semibold">Registracija</p>
+              <p className="text-xs text-gray-600">09:00 – 10:00</p>
+            </div>
+            <div className="rounded-md bg-gray-50 p-4">
+              <p className="text-sm font-semibold">Skupinski del</p>
+              <p className="text-xs text-gray-600">10:00 – 16:00</p>
+            </div>
+            <div className="rounded-md bg-gray-50 p-4">
+              <p className="text-sm font-semibold">Finala & podelitev</p>
+              <p className="text-xs text-gray-600">16:30 – 18:00</p>
+            </div>
+          </div>
+
+          <h3 className="mt-6 text-sm text-gray-700">2. dan</h3>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-md bg-gray-50 p-4">
+              <p className="text-sm font-semibold">Registracija</p>
+              <p className="text-xs text-gray-600">09:00 – 10:00</p>
+            </div>
+            <div className="rounded-md bg-gray-50 p-4">
+              <p className="text-sm font-semibold">Skupinski del</p>
+              <p className="text-xs text-gray-600">10:00 – 16:00</p>
+            </div>
+            <div className="rounded-md bg-gray-50 p-4">
+              <p className="text-sm font-semibold">Finala & podelitev</p>
+              <p className="text-xs text-gray-600">16:30 – 18:00</p>
+            </div>
+          </div>          
+          <Link
+            href="/urnik"
+            className="mt-5 inline-block rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800"
+          >
+            Celoten urnik
+          </Link>
+        </div>
+      </section>
+
+      {/* PRAVILA (teaser) */}
+      <section id="pravila" className="mx-auto max-w-6xl px-6 pb-20">
+        <div className="rounded-2xl border border-white/15 bg-white/5 p-6">
+          <h2 className="text-xl font-bold">Pravila & oprema</h2>
+          <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-white/85">
+            <li>Prinesi lasten računalnik/konzolo, periferijo in razdelilec.</li>
+            <li>Spoštuj fair-play in navodila organizatorja.</li>
+            <li>Alkohol in vandalizem nista dovoljena.</li>
+          </ul>
+          <Link
+            href="/pravila"
+            className="mt-4 inline-block rounded-md border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
+          >
+            Poglej celotna pravila
+          </Link>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-white/10 bg-black/30">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 sm:flex-row">
+          <p className="text-sm text-white/70">
+            © {new Date().getFullYear()} ERŠ ŠCV • LAN Party
+          </p>
+          <div className="flex items-center gap-3 text-sm">
+            <Link href="/kontakt" className="hover:underline">Kontakt</Link>
+            <span className="opacity-40">•</span>
+            <Link href="/organizatorji" className="hover:underline">Organizatorji</Link>
+          </div>
+        </div>
+      </footer>
+    </main>
   );
 }
