@@ -1,39 +1,43 @@
-import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
+// app/teams/page.tsx
+import { createClient } from '@supabase/supabase-js';
+
+const COLORS = {
+  primary: '#005AA7', // ERŠ modra (usklajeno z domačo stranjo)
+  accent:  '#78BE20', // ŠCV zelena
+  dark:    '#0B132B',
+};
 
 type GroupRow = {
   id: number;
   created_at: string | null;
-  group_name: string | null;
-  members: string | string[] | null;
-  games: string | null;
+  group_name: string | null; // TEXT
+  members: string | null;    // TEXT (npr. "Ana, Miha, Gal")
+  games: string | null;      // TEXT (npr. "CS2, Valorant")
 };
 
-function parseMembers(m: GroupRow['members']): string[] {
-  if (Array.isArray(m)) return m;
-  if (typeof m === 'string') {
-    return m
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-  }
-  return [];
-}
-
 export default async function TeamsPage() {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
   const { data, error } = await supabase
     .from('groups')
     .select('id, created_at, group_name, members, games')
     .order('created_at', { ascending: false });
 
   if (error) {
-    // preprosto sporočilo o napaki
     return (
-      <main className="mx-auto max-w-5xl p-6">
-        <h1 className="text-2xl font-bold">Ekipe</h1>
-        <p className="mt-4 rounded-md bg-red-50 p-4 text-red-700">
-          Napaka pri branju podatkov: {error.message}
-        </p>
+      <main
+        className="min-h-screen text-white"
+        style={{ background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)` }}
+      >
+        <div className="mx-auto max-w-6xl px-6 py-10">
+          <h1 className="text-3xl font-extrabold">Ekipe</h1>
+          <p className="mt-6 rounded-lg bg-red-500/15 p-4 text-red-200">
+            Napaka pri branju podatkov: {error.message}
+          </p>
+        </div>
       </main>
     );
   }
@@ -41,86 +45,76 @@ export default async function TeamsPage() {
   const groups: GroupRow[] = data ?? [];
 
   return (
-    <main className="mx-auto max-w-5xl p-6">
-      <header className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Ekipe</h1>
-        <Link
-          href="/admin/teams/new"
-          className="rounded-md bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800"
-        >
-          Dodaj ekipo
-        </Link>
-      </header>
+    <main
+      className="min-h-screen text-white"
+      style={{ background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)` }}
+    >
+      {/* Naslovni trak v stilu domače strani */}
+      <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
+        <h1 className="text-4xl font-extrabold leading-tight">
+          LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
+        </h1>
+        <p className="mt-2 text-white/80">Seznam prijavljenih ekip in članov.</p>
+      </section>
 
-      <div className="overflow-x-auto rounded-lg border">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                #
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                Ime ekipe
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                Člani
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                Igra / igre
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-600">
-                Akcije
-              </th>
-            </tr>
-          </thead>
-
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {groups.length === 0 ? (
-              <tr>
-                <td className="px-4 py-5 text-sm text-gray-500" colSpan={5}>
-                  Trenutno ni vnešenih ekip.
-                </td>
+      {/* Tabela ekip */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="overflow-x-auto rounded-2xl border border-white/15 bg-white/5 backdrop-blur">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/10">
+              <tr className="text-left text-xs font-semibold uppercase tracking-wide text-white/90">
+                <th className="px-4 py-3">#</th>
+                <th className="px-4 py-3">Ime ekipe</th>
+                <th className="px-4 py-3">Člani</th>
+                <th className="px-4 py-3">Igre</th>
+                <th className="px-4 py-3">Ustvarjeno</th>
               </tr>
-            ) : (
-              groups.map((g, i) => {
-                const members = parseMembers(g.members);
-                return (
-                  <tr key={g.id}>
-                    <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                      {i + 1}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-900">
+            </thead>
+            <tbody className="divide-y divide-white/10">
+              {groups.length === 0 ? (
+                <tr>
+                  <td className="px-4 py-6 text-white/80" colSpan={5}>
+                    Trenutno ni vnešenih ekip.
+                  </td>
+                </tr>
+              ) : (
+                groups.map((g, i) => (
+                  <tr key={g.id} className="hover:bg-white/5">
+                    <td className="whitespace-nowrap px-4 py-4 text-sm">{i + 1}</td>
+                    <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold">
                       {g.group_name ?? '—'}
                     </td>
-                    <td className="px-4 py-4 text-sm text-gray-700">
-                      {members.length ? (
-                        <ul className="list-inside list-disc space-y-1">
-                          {members.map((m) => (
-                            <li key={m}>{m}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span className="text-gray-400">—</span>
-                      )}
+                    {/* Člani in igre sta TEXT v bazi – prikažemo kot en sam stolpec (brez parsanja) */}
+                    <td className="px-4 py-4 text-sm text-white/90">
+                      {g.members && g.members.trim().length > 0 ? g.members : '—'}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                      {g.games ?? '—'}
+                    <td className="px-4 py-4 text-sm text-white/90">
+                      {g.games && g.games.trim().length > 0 ? g.games : '—'}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-4 text-right text-sm">
-                      <Link
-                        href={`/teams/${g.id}`}
-                        className="rounded-md border px-3 py-1 hover:bg-gray-50"
-                      >
-                        Odpri
-                      </Link>
+                    <td className="whitespace-nowrap px-4 py-4 text-sm text-white/70">
+                      {g.created_at
+                        ? new Date(g.created_at).toLocaleString('sl-SI', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })
+                        : '—'}
                     </td>
                   </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Accent trak */}
+        <div
+          className="mt-6 h-1 w-24 rounded-full"
+          style={{ backgroundColor: COLORS.accent }}
+        />
+      </section>
     </main>
   );
 }
