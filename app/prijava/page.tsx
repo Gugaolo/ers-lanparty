@@ -9,15 +9,15 @@ const COLORS = {
   dark: '#0B132B',
 };
 
+// SERVER ACTION – shrani ekipo v groups
 async function createGroup(formData: FormData) {
   'use server';
 
   const group_name = (formData.get('group_name') || '').toString().trim();
   const members = (formData.get('members') || '').toString().trim();
-  const games = (formData.get('games') || '').toString().trim();
+  const games = (formData.get('games') || '').toString().trim(); // iz dropdowna
 
   if (!group_name || !members || !games) {
-    // minimalna validacija na serverju
     console.error('Manjkajoča polja pri prijavi ekipe.');
     return;
   }
@@ -26,7 +26,7 @@ async function createGroup(formData: FormData) {
     {
       group_name,
       members,
-      games,
+      games, // npr. "CS2"
     },
   ]);
 
@@ -35,12 +35,28 @@ async function createGroup(formData: FormData) {
     return;
   }
 
-  // osveži seznam ekip in preusmeri na /teams
   revalidatePath('/teams');
   redirect('/teams');
 }
 
+type Game = {
+  id: number;
+  game_name: string | null;
+};
+
 export default async function PrijavaPage() {
+  // PREBEREMO IGRE IZ BAZE
+  const { data: games, error } = await supabaseServer
+    .from('games')
+    .select('id, game_name')
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Napaka pri branju iger:', error);
+  }
+
+  const gameOptions: Game[] = games ?? [];
+
   return (
     <main
       className="min-h-screen text-white"
@@ -48,9 +64,17 @@ export default async function PrijavaPage() {
         background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)`,
       }}
     >
-      {/* Header v istem stilu kot druge strani */}
+      {/* Header */}
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
-        <h1 className="text-4xl font-extrabold leading-tight">
+        <a
+          href="/"
+          className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
+          style={{ backgroundColor: COLORS.accent }}
+        >
+          ← Domov
+        </a>
+
+        <h1 className="mt-4 text-4xl font-extrabold leading-tight">
           Prijava ekipe <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
         </h1>
         <p className="mt-2 text-white/80">
@@ -103,22 +127,40 @@ export default async function PrijavaPage() {
               />
             </div>
 
-            {/* Igre */}
+            {/* Igre – DROPDOWN IZ BAZE */}
             <div>
               <label
                 htmlFor="games"
                 className="block text-sm font-medium text-white/90"
               >
-                Igre, ki jih ekipa igra *
+                Igra *
               </label>
-              <input
+              <select
                 id="games"
                 name="games"
-                type="text"
                 required
-                className="mt-2 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/60"
-                placeholder="npr. CS2, Valorant, Rocket League..."
-              />
+                className="mt-2 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none focus:border-white/60"
+                defaultValue=""
+              >
+                <option value="" disabled className="bg-black text-white">
+                  Izberi igro
+                </option>
+                {gameOptions.map((g) => (
+                  <option
+                    key={g.id}
+                    value={g.game_name ?? ''}
+                    className="bg-black text-white"
+                  >
+                    {g.game_name}
+                  </option>
+                ))}
+              </select>
+              {gameOptions.length === 0 && (
+                <p className="mt-1 text-xs text-red-200">
+                  Trenutno v bazi ni dodanih iger. Dodaj jih v Supabase tabelo
+                  <strong> games</strong>.
+                </p>
+              )}
             </div>
 
             {/* Gumbi */}
