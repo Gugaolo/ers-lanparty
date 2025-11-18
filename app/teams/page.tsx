@@ -1,36 +1,35 @@
-// app/teams/page.tsx
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 
 const COLORS = {
-  primary: '#005AA7', // ERŠ modra (usklajeno z domačo stranjo)
-  accent:  '#78BE20', // ŠCV zelena
-  dark:    '#0B132B',
+  primary: '#005AA7',
+  accent: '#78BE20',
+  dark: '#0B132B',
 };
 
 type GroupRow = {
   id: number;
   created_at: string | null;
-  group_name: string | null; // TEXT
-  members: string | null;    // TEXT (npr. "Ana, Miha, Gal")
-  games: string | null;      // TEXT (npr. "CS2, Valorant")
+  group_name: string | null;
+  members: string | null;
+  games: string | null;
 };
 
 export default async function TeamsPage() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
   const { data, error } = await supabase
     .from('groups')
     .select('id, created_at, group_name, members, games')
     .order('created_at', { ascending: false });
 
+  console.log('SUPABASE GROUPS data =>', data);
+  console.log('SUPABASE GROUPS error =>', error);
+
   if (error) {
     return (
       <main
         className="min-h-screen text-white"
-        style={{ background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)` }}
+        style={{
+          background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)`,
+        }}
       >
         <div className="mx-auto max-w-6xl px-6 py-10">
           <h1 className="text-3xl font-extrabold">Ekipe</h1>
@@ -47,9 +46,10 @@ export default async function TeamsPage() {
   return (
     <main
       className="min-h-screen text-white"
-      style={{ background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)` }}
+      style={{
+        background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)`,
+      }}
     >
-      {/* Naslovni trak v stilu domače strani */}
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
         <h1 className="text-4xl font-extrabold leading-tight">
           LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
@@ -57,7 +57,6 @@ export default async function TeamsPage() {
         <p className="mt-2 text-white/80">Seznam prijavljenih ekip in članov.</p>
       </section>
 
-      {/* Tabela ekip */}
       <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="overflow-x-auto rounded-2xl border border-white/15 bg-white/5 backdrop-blur">
           <table className="min-w-full divide-y divide-white/10">
@@ -80,13 +79,16 @@ export default async function TeamsPage() {
               ) : (
                 groups.map((g, i) => (
                   <tr key={g.id} className="hover:bg-white/5">
-                    <td className="whitespace-nowrap px-4 py-4 text-sm">{i + 1}</td>
+                    <td className="whitespace-nowrap px-4 py-4 text-sm">
+                      {i + 1}
+                    </td>
                     <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold">
                       {g.group_name ?? '—'}
                     </td>
-                    {/* Člani in igre sta TEXT v bazi – prikažemo kot en sam stolpec (brez parsanja) */}
                     <td className="px-4 py-4 text-sm text-white/90">
-                      {g.members && g.members.trim().length > 0 ? g.members : '—'}
+                      {g.members && g.members.trim().length > 0
+                        ? g.members
+                        : '—'}
                     </td>
                     <td className="px-4 py-4 text-sm text-white/90">
                       {g.games && g.games.trim().length > 0 ? g.games : '—'}
@@ -109,7 +111,6 @@ export default async function TeamsPage() {
           </table>
         </div>
 
-        {/* Accent trak */}
         <div
           className="mt-6 h-1 w-24 rounded-full"
           style={{ backgroundColor: COLORS.accent }}
