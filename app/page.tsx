@@ -36,6 +36,9 @@ export default function Home() {
           <Link href="#igre" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
             Igre
           </Link>
+          <Link href="/teams" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
+            Ekipe
+          </Link>
           <Link href="#urnik" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
             Urnik
           </Link>
@@ -43,7 +46,7 @@ export default function Home() {
             Pravila
           </Link>
           <Link
-            href="/teams"
+            href="/prijava"
             className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100"
           >
             Prijava ekipe

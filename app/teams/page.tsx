@@ -20,9 +20,6 @@ export default async function TeamsPage() {
     .select('id, created_at, group_name, members, games')
     .order('created_at', { ascending: false });
 
-  console.log('SUPABASE GROUPS data =>', data);
-  console.log('SUPABASE GROUPS error =>', error);
-
   if (error) {
     return (
       <main
@@ -108,6 +105,13 @@ export default async function TeamsPage() {
                 ))
               )}
             </tbody>
+            <a
+          href="/"
+          className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
+          style={{ backgroundColor: COLORS.accent }}
+        >
+          ← Domov
+        </a>
           </table>
         </div>
 
