@@ -4,9 +4,12 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const COLORS = {
-  primary: '#005AA7',
-  accent: '#78BE20',
-  dark: '#0B132B',
+  primary: "#00F6FF",  // neon modra — glavni poudarek
+  accent:  "#1A8CFF",  // turkizna neonska
+  secondary: "#7BCBFF", // mehka svetla modra (za prelive, hoverje)
+  dark:    "#02040A",  // ozadje strani
+  darkSoft: "#0A0F1A", // kartice / sekcije
+  light:   "#E6F7FF",  // svetla modra za kontrastne elemente
 };
 
 // SERVER ACTION – shrani ekipo v groups
@@ -61,7 +64,10 @@ export default async function PrijavaPage() {
     <main
       className="min-h-screen text-white"
       style={{
-        background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)`,
+        background: `radial-gradient(circle at center,
+  rgba(0, 183, 255, 0.25),
+  rgba(2, 4, 10, 1) 70%
+)`,
       }}
     >
       {/* Header */}

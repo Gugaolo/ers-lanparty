@@ -1,9 +1,12 @@
 import { supabase } from '@/lib/supabase';
 
 const COLORS = {
-  primary: '#005AA7',
-  accent: '#78BE20',
-  dark: '#0B132B',
+  primary: "#00F6FF",  // neon modra — glavni poudarek
+  accent:  "#1A8CFF",  // turkizna neonska
+  secondary: "#7BCBFF", // mehka svetla modra (za prelive, hoverje)
+  dark:    "#02040A",  // ozadje strani
+  darkSoft: "#0A0F1A", // kartice / sekcije
+  light:   "#E6F7FF",  // svetla modra za kontrastne elemente
 };
 
 type GroupRow = {
@@ -25,7 +28,10 @@ export default async function TeamsPage() {
       <main
         className="min-h-screen text-white"
         style={{
-          background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)`,
+          background: `radial-gradient(circle at center,
+  rgba(0, 183, 255, 0.25),
+  rgba(2, 4, 10, 1) 70%
+)`,
         }}
       >
         <div className="mx-auto max-w-6xl px-6 py-10">
@@ -44,7 +50,10 @@ export default async function TeamsPage() {
     <main
       className="min-h-screen text-white"
       style={{
-        background: `linear-gradient(180deg, ${COLORS.primary} 0%, ${COLORS.dark} 100%)`,
+        background: `radial-gradient(circle at center,
+  rgba(0, 183, 255, 0.25),
+  rgba(2, 4, 10, 1) 70%
+)`,
       }}
     >
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
@@ -105,14 +114,15 @@ export default async function TeamsPage() {
                 ))
               )}
             </tbody>
-            <a
+            
+          </table>
+          <a
           href="/"
           className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
           style={{ backgroundColor: COLORS.accent }}
         >
           ← Domov
         </a>
-          </table>
         </div>
 
         <div
