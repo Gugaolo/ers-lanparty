@@ -106,11 +106,6 @@ export default function KontaktPage() {
             >
               Ostale informacije
             </h2>
-            <p className="mt-2 text-sm text-white/80">
-              Sem lahko kasneje dodaš še: lokacijo v šoli, učilnico, kontakt
-              za tehnično pomoč, povezave na obrazce ali dodatna navodila za
-              ekipe.
-            </p>
           </div>
         </div>
 
