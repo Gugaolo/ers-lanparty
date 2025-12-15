@@ -1,8 +1,9 @@
-// app/prijava/FormClient.tsx
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 import { createGroup, type FormState } from './actions';
 
 const COLORS = {
@@ -21,21 +22,59 @@ type Game = {
 
 export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
   const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   const initialState: FormState = { error: null, success: false };
   const [state, formAction] = useActionState(createGroup, initialState);
 
-  // ✅ ko server action uspe, preusmeri
+  // ko server action uspe, preusmeri
   useEffect(() => {
     if (state.success) router.push('/teams');
   }, [state.success, router]);
+
+  // Preveri, ali je uporabnik prijavljen
+  useEffect(() => {
+    const loadUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUserEmail(data?.user?.email ?? null);
+    };
+    loadUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserEmail(session?.user?.email ?? null);
+    });
+
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="rounded-2xl border border-white/15 bg-white/5 p-6 shadow-xl backdrop-blur sm:p-8">
       <h2 className="text-xl font-semibold">Podatki o ekipi</h2>
       <p className="mt-1 text-sm text-white/70">Polja označena z * so obvezna.</p>
 
-      {/* ✅ Lep error message */}
+      {!userEmail && (
+        <div className="mt-4 rounded-md border border-yellow-400/30 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-50">
+          Za oddajo prijave se najprej prijavi ali ustvari profil.
+          <div className="mt-3 flex gap-2">
+            <Link
+              href="/login"
+              className="rounded-md bg-white/15 px-3 py-2 text-xs font-semibold text-white hover:bg-white/25"
+            >
+              Prijava
+            </Link>
+            <Link
+              href="/signup"
+              className="rounded-md border border-white/25 px-3 py-2 text-xs font-semibold text-white hover:bg-white/10"
+            >
+              Ustvari profil
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Lepo prikazan error */}
       {state.error && (
         <div
           className="mt-4 rounded-md px-4 py-3 text-sm font-semibold"
@@ -45,11 +84,14 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
             color: '#FFD6D6',
           }}
         >
-          ⚠️ {state.error}
+          Napaka: {state.error}
         </div>
       )}
 
-      <form action={formAction} className="mt-6 space-y-5">
+      <form
+        action={formAction}
+        className="mt-6 space-y-5"
+      >
         {/* Ime ekipe */}
         <div>
           <label htmlFor="group_name" className="block text-sm font-medium text-white/90">
@@ -80,7 +122,7 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
           />
         </div>
 
-        {/* Igre – MULTI SELECT */}
+        {/* Igre — MULTI SELECT */}
         <div>
           <label htmlFor="games" className="block text-sm font-medium text-white/90">
             Igre *
@@ -110,11 +152,29 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
           )}
         </div>
 
+        {/* Logo URL */}
+        <div>
+          <label htmlFor="logo_url" className="block text-sm font-medium text-white/90">
+            Povezava do slike ekipe (URL)
+          </label>
+          <input
+            id="logo_url"
+            name="logo_url"
+            type="url"
+            className="mt-2 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/60"
+            placeholder="https://primer.si/logo.png"
+          />
+          <p className="mt-1 text-xs text-white/50">
+            Vnesi javno dostopen URL (PNG/JPG/WebP).
+          </p>
+        </div>
+
         {/* Gumb */}
         <div className="mt-6 flex flex-wrap gap-3">
           <button
             type="submit"
-            className="rounded-md px-5 py-2.5 text-sm font-semibold text-white shadow"
+            disabled={!userEmail}
+            className="rounded-md px-5 py-2.5 text-sm font-semibold text-white shadow disabled:opacity-50"
             style={{ backgroundColor: COLORS.accent }}
           >
             Pošlji prijavo

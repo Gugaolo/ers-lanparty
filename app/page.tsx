@@ -1,6 +1,7 @@
 // app/page.tsx
 import Image from "next/image";
 import Link from "next/link";
+import NavUser from "./components/NavUser";
 
 const COLORS = {
   primary: "#00F6FF",  // neon modra — glavni poudarek
@@ -51,12 +52,7 @@ export default function Home() {
           <Link href="#pravila" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
             Pravila
           </Link>
-          <Link
-            href="/prijava"
-            className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100"
-          >
-            Prijava ekipe
-          </Link>
+          <NavUser />
         </div>
       </nav>
 

@@ -42,11 +42,11 @@ export default async function PrijavaPage() {
           className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
           style={{ backgroundColor: COLORS.accent }}
         >
-          ← Domov
+          Domov
         </a>
 
         <h1 className="mt-4 text-4xl font-extrabold leading-tight">
-          Prijava ekipe <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
+          Prijava ekipe <span style={{ color: COLORS.accent }}>ERŠ RŠCV</span>
         </h1>
         <p className="mt-2 text-white/80">
           Izpolni podatke in prijavi svojo ekipo na LAN Party.
