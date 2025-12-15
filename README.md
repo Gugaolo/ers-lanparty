@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 ERŠ ŠCV LAN Party
 
-## Getting Started
+Official web application for organizing a LAN party event at  
+**Electro and Computer School Velenje (ERŠ ŠCV)**.
 
-First, run the development server:
+The application provides event information, team registration, game selection, schedule, and rules in one place.
 
+---
+
+## 📌 Project Description
+
+**ERŠ ŠCV LAN Party** is a web application designed for students and visitors of a school LAN party event.  
+It serves as an information and registration platform that simplifies event organization and team sign-ups.
+
+Main features:
+- Event overview
+- Team registration
+- Multiple game selection
+- Team and member listing
+- Event schedule
+- Tournament rules
+- Organizer contact information
+
+---
+
+## 🎯 Project Purpose
+
+The purpose of this project is to:
+- demonstrate modern web development skills,
+- use a real database in a real-world scenario,
+- connect frontend and backend logic,
+- practice full-stack application development.
+
+This project was created as part of a school assignment.
+
+---
+
+## 🛠️ Technologies Used
+
+- **Next.js 16 (App Router)**
+- **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **Supabase** (database & authentication)
+- **Vercel** (deployment)
+- **pnpm** (package manager)
+
+---
+
+## 📂 Project Structure
+
+app/
+├─ page.tsx # home page
+├─ teams/ # teams list
+├─ prijava/ # team registration
+├─ urnik/ # event schedule
+├─ pravila/ # rules
+├─ kontakt/ # contact page
+└─ organizatorji/ # organizers
+
+lib/
+├─ supabaseServer.ts # Supabase server client
+└─ utils.ts # helper functions
+
+public/
+└─ images/ # images and logos
+
+styles/
+└─ globals.css # global styles
+
+yaml
+Copy code
+
+---
+
+## 🧑‍💻 Installation & Local Development
+
+### 1️⃣ Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+git clone https://github.com/Gugaolo/ers-lanparty.git
+cd ers-lanparty
+2️⃣ Install dependencies
+bash
+Copy code
+pnpm install
+3️⃣ Environment setup
+Create a .env.local file in the project root:
+
+env
+Copy code
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=xxxx
+4️⃣ Run the development server
+bash
+Copy code
 pnpm dev
-# or
-bun dev
-```
+The application will be available at:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+arduino
+Copy code
+http://localhost:3000
+🗄️ Database (Supabase)
+The project uses Supabase as the backend service.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Main tables:
+groups – registered teams
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+games – available games
 
-## Learn More
+Example columns in groups table:
 
-To learn more about Next.js, take a look at the following resources:
+group_name – team name
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+members – team members
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+games – selected games
 
-## Deploy on Vercel
+created_at – registration date
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🔐 Authentication
+The application uses Supabase Authentication with Google Sign-In.
+This allows users to authenticate securely without building a custom login system.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🎨 Design
+Forced dark mode for consistent appearance
+
+Colors inspired by the LAN party logo
+
+Fully responsive layout (desktop & mobile)
+
+🚀 Deployment
+The project is deployed using Vercel:
+
+Automatic builds on GitHub pushes
+
+Connected to Supabase production database
+
+👥 Author
+Name: (your name)
+
+Class: (e.g. R4A)
+
+School: Electro and Computer School Velenje (ERŠ ŠCV)
