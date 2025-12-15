@@ -50,28 +50,39 @@ This project was created as part of a school assignment.
 ## 📂 Project Structure
 
 app/
+
 ├─ page.tsx # home page
+
 ├─ teams/ # teams list
+
 ├─ prijava/ # team registration
+
 ├─ urnik/ # event schedule
+
 ├─ pravila/ # rules
+
 ├─ kontakt/ # contact page
+
 └─ organizatorji/ # organizers
 
+
 lib/
+
 ├─ supabaseServer.ts # Supabase server client
+
 └─ utils.ts # helper functions
 
+
 public/
+
 └─ images/ # images and logos
 
+
 styles/
+
 └─ globals.css # global styles
 
-yaml
-Copy code
 
----
 
 ## 🧑‍💻 Installation & Local Development
 
