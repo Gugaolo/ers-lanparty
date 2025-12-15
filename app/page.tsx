@@ -26,7 +26,7 @@ export default function Home() {
       }}
     >
       {/* NAV */}
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+      <nav className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <Image
             src="/ERSLogotip.png" // <- dodaj logo v /public
@@ -53,6 +53,18 @@ export default function Home() {
             Pravila
           </Link>
           <NavUser />
+        </div>
+        {/* Mobile quick links */}
+        <div className="flex gap-2 overflow-x-auto sm:hidden">
+          <Link href="/prijava" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
+            Prijava ekipe
+          </Link>
+          <Link href="/teams" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
+            Ekipe
+          </Link>
+          <Link href="/login" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
+            Prijava
+          </Link>
         </div>
       </nav>
 

@@ -59,7 +59,7 @@ export default async function TeamsPage() {
     >
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
         <h1 className="text-4xl font-extrabold leading-tight">
-          LAN Party <span style={{ color: COLORS.accent }}>ERŠ RS CV</span>
+          LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
         </h1>
         <p className="mt-2 text-white/80">Seznam prijavljenih ekip in članov.</p>
       </section>
