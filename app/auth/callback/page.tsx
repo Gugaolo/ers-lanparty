@@ -15,6 +15,13 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const runExchange = async () => {
+      // Če je seja že vzpostavljena (npr. po povratku), takoj preusmeri
+      const { data: existing } = await supabase.auth.getSession();
+      if (existing?.session) {
+        router.replace("/profile");
+        return;
+      }
+
       const code = new URLSearchParams(window.location.search).get("code");
       if (!code) {
         setStatus("Manjka koda za prijavo.");
@@ -22,13 +29,17 @@ export default function AuthCallbackPage() {
       }
 
       const { error } = await supabase.auth.exchangeCodeForSession(code);
-      if (error) {
-        setStatus(`Napaka pri prijavi: ${error.message}`);
-        return;
+      if (!error) {
+        setStatus("Prijava uspešna, preusmerjam na profil...");
+        router.replace("/profile");
+      } else {
+        const { data: retry } = await supabase.auth.getSession();
+        if (retry?.session) {
+          router.replace("/profile");
+        } else {
+          setStatus(`Napaka pri prijavi: ${error.message}`);
+        }
       }
-
-      setStatus("Prijava uspešna, preusmerjam na profil...");
-      router.replace("/profile");
     };
 
     runExchange();
