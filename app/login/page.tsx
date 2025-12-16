@@ -1,8 +1,9 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 const COLORS = {
   accent: "#1A8CFF",
@@ -10,6 +11,7 @@ const COLORS = {
 };
 
 export default function LoginPage() {
+  const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,16 +36,18 @@ export default function LoginPage() {
     setLoading(true);
     setMessage(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
+    if (data?.session) {
+      setMessage("Prijava uspešna. Preusmerjam...");
+      router.push("/profile");
+    } else if (error) {
       setMessage(`Napaka: ${error.message}`);
     } else {
-      setMessage("Prijava uspešna. Preusmerjam...");
-      window.location.href = "/profile";
+      setMessage("Nepričakovano stanje pri prijavi. Poskusi znova.");
     }
 
     setLoading(false);
@@ -65,15 +69,11 @@ export default function LoginPage() {
           className="inline-block rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
           style={{ backgroundColor: COLORS.accent }}
         >
-          ← Domov
+          Domov
         </Link>
 
-        <h1 className="mt-6 text-3xl font-extrabold leading-tight">
-          Prijava v račun
-        </h1>
-        <p className="mt-2 text-white/80">
-          Prijavi se z Google računom ali z e-mailom in geslom.
-        </p>
+        <h1 className="mt-6 text-3xl font-extrabold leading-tight">Prijava v račun</h1>
+        <p className="mt-2 text-white/80">Prijavi se z Google računom ali z e-mailom in geslom.</p>
 
         <div className="mt-8 space-y-6">
           <button
@@ -87,9 +87,7 @@ export default function LoginPage() {
             <h2 className="text-lg font-semibold">Prijava z e-mailom</h2>
             <form className="mt-4 space-y-4" onSubmit={handleEmailLogin}>
               <div>
-                <label className="text-xs uppercase tracking-wide text-white/70">
-                  E-mail
-                </label>
+                <label className="text-xs uppercase tracking-wide text-white/70">E-mail</label>
                 <input
                   type="email"
                   value={email}
@@ -100,9 +98,7 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="text-xs uppercase tracking-wide text-white/70">
-                  Geslo
-                </label>
+                <label className="text-xs uppercase tracking-wide text-white/70">Geslo</label>
                 <input
                   type="password"
                   value={password}
