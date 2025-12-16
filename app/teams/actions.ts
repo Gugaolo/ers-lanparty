@@ -4,28 +4,35 @@ import { revalidatePath } from 'next/cache';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
 import { supabaseServer } from '@/lib/supabaseServer';
 
-export type FormState = {
+export type UpdateFormState = {
   error: string | null;
   success: boolean;
 };
 
-export async function createGroup(
-  prevState: FormState,
+export async function updateGroup(
+  _prevState: UpdateFormState,
   formData: FormData
-): Promise<FormState> {
+): Promise<UpdateFormState> {
   const supabase = await createSupabaseServerClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
   if (authError || !authData?.user) {
-    return { success: false, error: 'Za prijavo ekipe se najprej prijavi (profil / Google).' };
+    return {
+      success: false,
+      error: 'Za urejanje ekipe se najprej prijavi (profil / Google).',
+    };
   }
 
   const user = authData.user;
+  const groupId = Number(formData.get('id'));
+  if (!groupId || Number.isNaN(groupId)) {
+    return { success: false, error: 'Manjka ID ekipe za urejanje.' };
+  }
+
   const group_name = (formData.get('group_name') || '').toString().trim();
   const members = (formData.get('members') || '').toString().trim();
   const logo_file = formData.get('logo_file');
 
-  // multi-select (več iger)
   const gamesSelected = formData
     .getAll('games')
     .map((g) => g.toString().trim())
@@ -34,48 +41,53 @@ export async function createGroup(
   if (!group_name || !members || gamesSelected.length === 0) {
     return {
       success: false,
-      error: 'Prosimo, izpolni vsa obvezna polja (ime ekipe, člani, vsaj 1 igra).',
+      error: 'Izpolni ime ekipe, člane in izberi vsaj eno igro.',
     };
-  }
-
-  // En profil -> ena ekipa
-  const { data: existingByOwner, error: ownerCheckError } = await supabase
-    .from('groups')
-    .select('id')
-    .eq('owner_id', user.id)
-    .maybeSingle();
-
-  if (ownerCheckError?.code === '42703') {
-    return {
-      success: false,
-      error:
-        'Tabela groups ne pozna stolpca owner_id. Dodaj stolpce owner_id uuid, owner_email text in logo_path text, nato poskusi znova.',
-    };
-  }
-
-  if (existingByOwner) {
-    return { success: false, error: 'Ta profil je že prijavil eno ekipo.' };
-  }
-
-  // preveri, če ime ekipe že obstaja (case-insensitive)
-  const { data: existing, error: checkError } = await supabase
-    .from('groups')
-    .select('id')
-    .ilike('group_name', group_name)
-    .maybeSingle();
-
-  if (checkError) {
-    return { success: false, error: 'Napaka pri preverjanju imena ekipe. Poskusi znova.' };
-  }
-
-  if (existing) {
-    return { success: false, error: 'Ekipa s tem imenom že obstaja. Izberi drugo ime.' };
   }
 
   const games = gamesSelected.join(', ');
 
-  // Upload logo file (optional)
-  let logo_path: string | null = null;
+  const { data: existingGroup, error: fetchError } = await supabase
+    .from('groups')
+    .select('id, owner_id, logo_path')
+    .eq('id', groupId)
+    .maybeSingle();
+
+  if (fetchError?.code === '42703') {
+    return {
+      success: false,
+      error:
+        'Tabela groups ne pozna stolpcev owner_id/logo_path. Dodaj stolpce owner_id uuid, owner_email text in logo_path text, nato poskusi znova.',
+    };
+  }
+
+  if (!existingGroup) {
+    return { success: false, error: 'Ekipe ni bilo mogoče najti.' };
+  }
+
+  if (existingGroup.owner_id !== user.id) {
+    return { success: false, error: 'To ni tvoja ekipa, urejanje ni dovoljeno.' };
+  }
+
+  const { data: duplicate, error: dupError } = await supabase
+    .from('groups')
+    .select('id')
+    .ilike('group_name', group_name)
+    .neq('id', groupId)
+    .maybeSingle();
+
+  if (dupError) {
+    return {
+      success: false,
+      error: 'Napaka pri preverjanju imena ekipe. Poskusi znova.',
+    };
+  }
+
+  if (duplicate) {
+    return { success: false, error: 'Ekipa s tem imenom že obstaja.' };
+  }
+
+  let logo_path: string | null | undefined = existingGroup.logo_path ?? null;
   if (logo_file instanceof File && logo_file.size > 0) {
     try {
       const arrayBuffer = await logo_file.arrayBuffer();
@@ -102,27 +114,19 @@ export async function createGroup(
     }
   }
 
-  const payload: Record<string, any> = {
-    group_name,
-    members,
-    games,
-    owner_id: user.id,
-    owner_email: user.email ?? null,
-  };
+  const { error: updateError } = await supabase
+    .from('groups')
+    .update({
+      group_name,
+      members,
+      games,
+      logo_path,
+    })
+    .eq('id', groupId)
+    .eq('owner_id', user.id);
 
-  if (logo_path) payload.logo_path = logo_path;
-
-  const { error: insertError } = await supabase.from('groups').insert([payload]);
-
-  if (insertError) {
-    if (insertError.code === '42703') {
-      return {
-        success: false,
-        error:
-          'Tabela groups ne pozna stolpcev owner_id/logo_path. Dodaj stolpce owner_id uuid, owner_email text in logo_path text, nato poskusi znova.',
-      };
-    }
-    return { success: false, error: 'Napaka pri shranjevanju ekipe. Poskusi znova.' };
+  if (updateError) {
+    return { success: false, error: 'Napaka pri shranjevanju sprememb. Poskusi znova.' };
   }
 
   revalidatePath('/teams');

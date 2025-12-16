@@ -1,12 +1,13 @@
-import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
+import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
 
 const COLORS = {
-  primary: "#00F6FF",
-  accent:  "#1A8CFF",
-  secondary: "#7BCBFF",
-  dark:    "#02040A",
-  darkSoft: "#0A0F1A",
-  light:   "#E6F7FF",
+  primary: '#00F6FF',
+  accent: '#1A8CFF',
+  secondary: '#7BCBFF',
+  dark: '#02040A',
+  darkSoft: '#0A0F1A',
+  light: '#E6F7FF',
 };
 
 type GroupRow = {
@@ -15,14 +16,30 @@ type GroupRow = {
   group_name: string | null;
   members: string | null;
   games: string | null;
-  logo_url?: string | null;
+  logo_path?: string | null;
+  owner_id?: string | null;
+  owner_email?: string | null;
 };
 
+export const dynamic = 'force-dynamic';
+
+function logoUrlFromPath(path?: string | null) {
+  if (!path) return null;
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!base) return null;
+  return `${base}/storage/v1/object/public/logos/${path}`;
+}
+
 export default async function TeamsPage() {
-  const { data, error } = await supabase
-    .from('groups')
-    .select('id, created_at, group_name, members, games, logo_url')
-    .order('created_at', { ascending: false });
+  const supabase = await createSupabaseServerClient();
+
+  const [{ data: authData }, { data, error }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase
+      .from('groups')
+      .select('id, created_at, group_name, members, games, logo_path, owner_id, owner_email')
+      .order('created_at', { ascending: false }),
+  ]);
 
   if (error) {
     return (
@@ -46,6 +63,14 @@ export default async function TeamsPage() {
   }
 
   const groups: GroupRow[] = data ?? [];
+  const userId = authData?.user?.id ?? null;
+  const userEmail = authData?.user?.email ?? null;
+  const myGroup =
+    groups.find(
+      (g) =>
+        (userId && g.owner_id === userId) ||
+        (userEmail && g.owner_email && g.owner_email.toLowerCase() === userEmail.toLowerCase())
+    ) ?? null;
 
   return (
     <main
@@ -75,52 +100,64 @@ export default async function TeamsPage() {
                 <th className="px-4 py-3">Člani</th>
                 <th className="px-4 py-3">Igre</th>
                 <th className="px-4 py-3">Ustvarjeno</th>
+                <th className="px-4 py-3">Uredi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               {groups.length === 0 ? (
                 <tr>
-                  <td className="px-4 py-6 text-white/80" colSpan={6}>
+                  <td className="px-4 py-6 text-white/80" colSpan={7}>
                     Trenutno ni vnešenih ekip.
                   </td>
                 </tr>
               ) : (
-                groups.map((g, i) => (
-                  <tr key={g.id} className="hover:bg-white/5">
-                    <td className="whitespace-nowrap px-4 py-4 text-sm">{i + 1}</td>
-                    <td className="whitespace-nowrap px-4 py-4">
-                      <img
-                        src={
-                          g.logo_url && g.logo_url.trim().length > 0
-                            ? g.logo_url
-                            : '/group_icon.jpg'
-                        }
-                        alt="Logo ekipe"
-                        className="h-10 w-10 rounded-md object-cover border border-white/10 bg-black/40"
-                      />
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold">
-                      {g.group_name ?? '—'}
-                    </td>
-                    <td className="px-4 py-4 text-sm text-white/90">
-                      {g.members && g.members.trim().length > 0 ? g.members : '—'}
-                    </td>
-                    <td className="px-4 py-4 text-sm text-white/90">
-                      {g.games && g.games.trim().length > 0 ? g.games : '—'}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-4 text-sm text-white/70">
-                      {g.created_at
-                        ? new Date(g.created_at).toLocaleString('sl-SI', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                        : '—'}
-                    </td>
-                  </tr>
-                ))
+                groups.map((g, i) => {
+                  const logoUrl = logoUrlFromPath(g.logo_path);
+                  return (
+                    <tr key={g.id} className="hover:bg-white/5">
+                      <td className="whitespace-nowrap px-4 py-4 text-sm">{i + 1}</td>
+                      <td className="whitespace-nowrap px-4 py-4">
+                        <img
+                          src={logoUrl || '/group_icon.jpg'}
+                          alt="Logo ekipe"
+                          className="h-10 w-10 rounded-md object-cover border border-white/10 bg-black/40"
+                        />
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold">
+                        {g.group_name ?? '-'}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-white/90">
+                        {g.members && g.members.trim().length > 0 ? g.members : '-'}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-white/90">
+                        {g.games && g.games.trim().length > 0 ? g.games : '-'}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-sm text-white/70">
+                        {g.created_at
+                          ? new Date(g.created_at).toLocaleString('sl-SI', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })
+                          : '-'}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-sm text-white/90">
+                        {myGroup && g.id === myGroup.id ? (
+                          <Link
+                            href="/teams/edit"
+                            className="rounded-md border border-white/25 px-3 py-1 text-xs font-semibold text-white hover:bg-white/10"
+                          >
+                            Uredi
+                          </Link>
+                        ) : (
+                          <span className="text-white/40">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -129,9 +166,35 @@ export default async function TeamsPage() {
             className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
             style={{ backgroundColor: COLORS.accent }}
           >
-            ← Domov
+            Domov
           </a>
         </div>
+
+        {myGroup && (
+          <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
+            Urejaš lahko samo svojo ekipo. Klikni{' '}
+            <Link href="/teams/edit" className="font-semibold underline">
+              Uredi ekipo
+            </Link>{' '}
+            za spremembe.
+          </div>
+        )}
+
+        {!userId && (
+          <div className="mt-6 rounded-lg border border-yellow-400/30 bg-yellow-400/10 px-4 py-4 text-sm text-yellow-50">
+            Za urejanje ekipe se prijavi v profil (zgoraj desno).
+          </div>
+        )}
+
+        {userId && !myGroup && (
+          <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
+            S tem profilom še ni prijavljene ekipe.{' '}
+            <a href="/prijava" className="font-semibold underline">
+              Prijavi ekipo
+            </a>{' '}
+            in jo boš lahko urejal na strani za urejanje.
+          </div>
+        )}
 
         <div
           className="mt-6 h-1 w-24 rounded-full"

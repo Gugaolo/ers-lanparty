@@ -5,14 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { createGroup, type FormState } from './actions';
+import { MultiSelect } from '@/app/components/MultiSelect';
 
 const COLORS = {
-  primary: "#00F6FF",
-  accent:  "#1A8CFF",
-  secondary: "#7BCBFF",
-  dark:    "#02040A",
-  darkSoft: "#0A0F1A",
-  light:   "#E6F7FF",
+  primary: '#00F6FF',
+  accent: '#1A8CFF',
+  secondary: '#7BCBFF',
+  dark: '#02040A',
+  darkSoft: '#0A0F1A',
+  light: '#E6F7FF',
 };
 
 type Game = {
@@ -88,10 +89,7 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
         </div>
       )}
 
-      <form
-        action={formAction}
-        className="mt-6 space-y-5"
-      >
+      <form action={formAction} className="mt-6 space-y-5">
         {/* Ime ekipe */}
         <div>
           <label htmlFor="group_name" className="block text-sm font-medium text-white/90">
@@ -122,28 +120,23 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
           />
         </div>
 
-        {/* Igre — MULTI SELECT */}
+        {/* Igre – multi-select */}
         <div>
           <label htmlFor="games" className="block text-sm font-medium text-white/90">
             Igre *
           </label>
-          <p className="mt-1 text-xs text-white/60">
-            Drži <strong>Ctrl</strong> (ali <strong>Cmd</strong>) za izbiro več iger.
-          </p>
-
-          <select
-            id="games"
-            name="games"
-            multiple
-            required
-            className="mt-2 h-32 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none focus:border-white/60"
-          >
-            {gameOptions.map((g) => (
-              <option key={g.id} value={g.game_name ?? ''} className="bg-black text-white">
-                {g.game_name}
-              </option>
-            ))}
-          </select>
+          <div className="mt-2">
+            <MultiSelect
+              name="games"
+              options={gameOptions
+                .map((g) => ({
+                  value: g.game_name ?? '',
+                  label: g.game_name ?? '',
+                }))
+                .filter((o) => o.value)}
+              placeholder="Izberi igre"
+            />
+          </div>
 
           {gameOptions.length === 0 && (
             <p className="mt-2 text-xs text-red-200">
@@ -152,20 +145,20 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
           )}
         </div>
 
-        {/* Logo URL */}
+        {/* Logo datoteka */}
         <div>
-          <label htmlFor="logo_url" className="block text-sm font-medium text-white/90">
-            Povezava do slike ekipe (URL)
+          <label htmlFor="logo_file" className="block text-sm font-medium text-white/90">
+            Logo ekipe (datoteka, opcijsko)
           </label>
           <input
-            id="logo_url"
-            name="logo_url"
-            type="url"
-            className="mt-2 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/60"
-            placeholder="https://primer.si/logo.png"
+            id="logo_file"
+            name="logo_file"
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            className="mt-2 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/60 file:mr-3 file:rounded-md file:border-0 file:bg-white/15 file:px-3 file:py-2 file:text-white file:text-sm"
           />
           <p className="mt-1 text-xs text-white/50">
-            Vnesi javno dostopen URL (PNG/JPG/WebP).
+            Naloži sliko (PNG/JPG/WebP). Če ne izbereš datoteke, bo uporabljen privzeti logo.
           </p>
         </div>
 
