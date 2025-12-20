@@ -46,7 +46,7 @@ export default function Home() {
           <Link href="/teams" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
             Ekipe
           </Link>
-          <Link href="#urnik" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
+          <Link href="/urnik" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
             Urnik
           </Link>
           <Link href="#pravila" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
@@ -251,7 +251,7 @@ export default function Home() {
           </div>
 
           {/* GUMB */}
-          <a
+          <Link
             href="/urnik"
             className="mt-6 inline-block rounded-md px-4 py-2 text-sm font-semibold shadow transition"
             style={{
@@ -260,8 +260,8 @@ export default function Home() {
               boxShadow: "0 0 10px rgba(0, 224, 255, 0.5)",
             }}
           >
-            Celoten urnik →
-          </a>
+            Celoten urnik
+          </Link>
         </div>
       </section>
 
