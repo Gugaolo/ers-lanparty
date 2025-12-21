@@ -31,13 +31,13 @@ export default function Home() {
         <div className="flex items-center gap-3">
           <Image
             src="/ERSLogotip.png"
-            alt="ERS CV"
+            alt="ERŠ ŠCV"
             width={40}
             height={40}
             priority
           />
           <span className="text-lg font-semibold tracking-tight">
-            ERS CV LAN PARTY
+            ERŠ ŠCV LAN PARTY
           </span>
         </div>
         <div className="hidden gap-3 sm:flex">
@@ -73,11 +73,11 @@ export default function Home() {
       <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-10 sm:grid-cols-2 sm:pt-16">
         <div>
           <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">
-            LAN Party <span style={{ color: COLORS.accent }}>ERS CV</span>
+            LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
           </h1>
           <p className="mt-4 max-w-xl text-white/80">
-            Turnirji, nagrade, ekipe in dobra druzba. Prinesi svoj racunalnik ali
-            se pridruzi kot gledalec. Povezujemo elektro in racunalniske navdusence
+            Turnirji, nagrade, ekipe in dobra družba. Prinesi svoj računalnik ali
+            se pridruži kot gledalec. Povezujemo elektro in računalniške navdušence
             v srcu Velenja.
           </p>
 
@@ -101,7 +101,7 @@ export default function Home() {
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="rounded-md bg-white/10 px-3 py-2">Lokacija: Gaudeamus</div>
             <div className="rounded-md bg-white/10 px-3 py-2">Datum: 13. - 15. Marec</div>
-            <div className="rounded-md bg-white/10 px-3 py-2">Vstop: brezplacno</div>
+            <div className="rounded-md bg-white/10 px-3 py-2">Vstop: brezplačno</div>
           </div>
         </div>
 
@@ -122,8 +122,8 @@ export default function Home() {
         <div className="grid gap-6 md:grid-cols-3">
           {[
             { title: "Ekipe in solo", desc: "Prijavi ekipo ali igraj samostojno." },
-            { title: "Vec iger", desc: "CS2, Rocket League, Fortnite in se druge." },
-            { title: "Hitro omrezje", desc: "Stabilna povezava in tehnicna podpora." },
+            { title: "Vec iger", desc: "CS2, Rocket League, Fortnite in še druge." },
+            { title: "Hitro omrezje", desc: "Stabilna povezava in tehnična podpora." },
           ].map((c) => (
             <div
               key={c.title}
@@ -140,7 +140,7 @@ export default function Home() {
       <section id="igre" className="mx-auto max-w-6xl px-6 pb-16">
         <h2 className="text-2xl font-bold">Igre na dogodku</h2>
         <p className="mt-2 text-white/80">
-          Izbor aktualnih naslovov. Koncni seznam objavimo po zakljucku prijav.
+          Izbor aktualnih naslovov. Končni seznam objavimo po zaključku prijav.
         </p>
         <div className="mt-6 flex flex-wrap gap-2">
           {["CS2", "Fortnite", "Rocket League", "Clash Royale", "Fifa"].map((g) => (
@@ -234,8 +234,8 @@ export default function Home() {
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6">
           <h2 className="text-xl font-bold">Pravila & oprema</h2>
           <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-white/85">
-            <li>Prinesi lasten racunalnik/konzolo, periferijo in razdelilec.</li>
-            <li>Spostuj fair-play in navodila organizatorja.</li>
+            <li>Prinesi lasten raunalnik/konzolo, periferijo in razdelilec.</li>
+            <li>Spoštuj fair-play in navodila organizatorja.</li>
             <li>Alkohol in vandalizem nista dovoljena.</li>
           </ul>
           <Link
@@ -251,7 +251,7 @@ export default function Home() {
       <footer className="border-t border-white/10 bg-black/30">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 sm:flex-row">
           <p className="text-sm text-white/70">
-            © {new Date().getFullYear()} ERS CV LAN Party
+            © {new Date().getFullYear()} ERŠ ŠCV LAN Party
           </p>
           <div className="flex items-center gap-3 text-sm">
             <Link href="/kontakt" className="hover:underline">Kontakt</Link>

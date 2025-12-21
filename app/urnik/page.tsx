@@ -32,13 +32,13 @@ export default function UrnikPage() {
 
         <div className="mt-6">
           <p className="text-sm uppercase tracking-[0.25em] text-white/60">
-            ERS SCV LAN PARTY
+            ERŠ ŠCV LAN PARTY
           </p>
           <h1 className="mt-2 text-4xl font-extrabold leading-tight sm:text-5xl">
             Urnik dogodka
           </h1>
           <p className="mt-3 text-white/80 text-lg">
-            3-dnevni LAN Party - ERS SCV
+            3-dnevni LAN Party - ERŠ ŠCV
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export default function UrnikPage() {
         </div>
 
         <div className="mt-10 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/75 backdrop-blur">
-          Urnik se lahko spremeni glede na stevilo prijavljenih ekip.
+          Urnik se lahko spremeni glede na število prijavljenih ekip.
         </div>
       </section>
     </main>
