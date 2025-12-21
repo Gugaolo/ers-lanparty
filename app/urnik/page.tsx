@@ -1,16 +1,7 @@
 "use client";
 
-type Slot = {
-  time: string;
-  title: string;
-  desc?: string;
-};
-
-type Day = {
-  name: string;
-  range: string;
-  slots: Slot[];
-};
+import Link from "next/link";
+import { SCHEDULE } from "../data/schedule";
 
 const COLORS = {
   accent: "#1A8CFF",
@@ -18,61 +9,6 @@ const COLORS = {
   surface: "#0A0F1A",
   base: "#02040A",
 };
-
-const SCHEDULE: Day[] = [
-  {
-    name: "1. dan – Petek",
-    range: "15:00 – 24:00",
-    slots: [
-      { time: "15:00 – 17:00", title: "Prihod, registracija, postavitev računalnikov" },
-      {
-        time: "17:00 – 17:30",
-        title: "Uradna otvoritev, pozdravni govor, razlaga pravil",
-      },
-      { time: "17:30 – 24:00", title: "CS2 – skupinski del tekem" },
-    ],
-  },
-  {
-    name: "2. dan – Sobota",
-    range: "10:00 – 23:00",
-    slots: [
-      {
-        time: "10:00 – 13:00",
-        title: "CS2 – nadaljevanje (skupinski del in izločilni boji)",
-      },
-      { time: "13:00 – 14:00", title: "Odmor za kosilo" },
-      { time: "14:00 – 18:00", title: "CS2 – polfinale in finale" },
-      {
-        time: "18:00 – 19:00",
-        title: "Odmor / priprava na večerne igre",
-      },
-      {
-        time: "19:00 – 23:00",
-        title: "Turnirji Fortnite & Rocket League",
-        desc: "Tekmovalne in zabavne igre",
-      },
-    ],
-  },
-  {
-    name: "3. dan – Nedelja",
-    range: "10:00 – 17:00",
-    slots: [
-      {
-        time: "10:00 – 13:00",
-        title: "Finala Fortnite & Rocket League",
-      },
-      { time: "13:00 – 14:00", title: "Odmor" },
-      {
-        time: "14:00 – 15:00",
-        title: "Podelitev nagrad in razglasitev zmagovalcev",
-      },
-      {
-        time: "15:00 – 17:00",
-        title: "Pospravljanje opreme, prosta igra, zaključek dogodka",
-      },
-    ],
-  },
-];
 
 export default function UrnikPage() {
   return (
@@ -83,7 +19,7 @@ export default function UrnikPage() {
       }}
     >
       <section className="mx-auto max-w-6xl px-6 pb-14 pt-12">
-        <a
+        <Link
           href="/"
           className="inline-block rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
           style={{
@@ -92,20 +28,20 @@ export default function UrnikPage() {
           }}
         >
           Domov
-        </a>
+        </Link>
 
         <div className="mt-6">
           <p className="text-sm uppercase tracking-[0.25em] text-white/60">
-            ERŠ ŠCV LAN PARTY
+            ERS CV LAN PARTY
           </p>
           <h1 className="mt-2 text-4xl font-extrabold leading-tight sm:text-5xl">
             Urnik dogodka
           </h1>
           <p className="mt-3 text-white/80 text-lg">
-            3-dnevni LAN Party – ERŠ ŠCV
+            3-dnevni LAN Party - ERS CV
           </p>
           <p className="mt-1 text-sm text-white/60">
-            Temen neon stil, polno tekem in dovolj odmorov za počitek.
+            Temen neon stil, polno tekem in dovolj odmorov za pocitek.
           </p>
         </div>
 
@@ -163,7 +99,7 @@ export default function UrnikPage() {
         </div>
 
         <div className="mt-10 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/75 backdrop-blur">
-          Urnik se lahko spremeni glede na število prijavljenih ekip.
+          Urnik se lahko spremeni glede na stevilo prijavljenih ekip.
         </div>
       </section>
     </main>
