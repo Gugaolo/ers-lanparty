@@ -32,16 +32,13 @@ export default function UrnikPage() {
 
         <div className="mt-6">
           <p className="text-sm uppercase tracking-[0.25em] text-white/60">
-            ERS CV LAN PARTY
+            ERS SCV LAN PARTY
           </p>
           <h1 className="mt-2 text-4xl font-extrabold leading-tight sm:text-5xl">
             Urnik dogodka
           </h1>
           <p className="mt-3 text-white/80 text-lg">
-            3-dnevni LAN Party - ERS CV
-          </p>
-          <p className="mt-1 text-sm text-white/60">
-            Temen neon stil, polno tekem in dovolj odmorov za pocitek.
+            3-dnevni LAN Party - ERS SCV
           </p>
         </div>
 
