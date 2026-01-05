@@ -100,7 +100,7 @@ export default function Home() {
           {/* Info trak */}
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="rounded-md bg-white/10 px-3 py-2">Lokacija: Gaudeamus</div>
-            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 13. - 15. Marec</div>
+            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 21. - 23. Marec</div>
             <div className="rounded-md bg-white/10 px-3 py-2">Vstop: brezplačno</div>
           </div>
         </div>
