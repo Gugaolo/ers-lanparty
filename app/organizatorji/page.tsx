@@ -16,27 +16,27 @@ type Organizer = {
 
 const ORGANIZERS: Organizer[] = [
   {
-    role: "Organizator1",
+    role: "Organizator 1",
     name: "Gal Štravs",
     className: "4. TRA",
   },
   {
-    role: "Organizator2",
+    role: "Organizator 2",
     name: "Tim Rednjak",
     className: "4. TRA",
   },
   {
-    role: "Organizator3",
+    role: "Organizator 3",
     name: "Andraž Dimec",
     className: "4. TRA",
   },
   {
-    role: "Organizator4",
+    role: "Organizator 4",
     name: "Tilen Zavolovšek",
     className: "4. TRA",
   },
   {
-    role: "Organizator5",
+    role: "Organizator 5",
     name: "Jon Zorko Kotnik",
     className: "4. TRA",
   },

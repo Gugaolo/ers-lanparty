@@ -100,7 +100,7 @@ export default function Home() {
           {/* Info trak */}
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="rounded-md bg-white/10 px-3 py-2">Lokacija: Gaudeamus</div>
-            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 21. - 23. Marec</div>
+            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 20. - 22. Marec</div>
             <div className="rounded-md bg-white/10 px-3 py-2">Vstop: brezplačno</div>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function Home() {
         {/* Hero ilustracija */}
         <div className="relative h-64 w-full sm:h-96">
           <Image
-            src="/ERS-LanParty.png"
+            src="/lan_party_logo.png"
             alt="LAN party illustration"
             fill
             className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.35)]"
@@ -122,8 +122,8 @@ export default function Home() {
         <div className="grid gap-6 md:grid-cols-3">
           {[
             { title: "Ekipe in solo", desc: "Prijavi ekipo ali igraj samostojno." },
-            { title: "Vec iger", desc: "CS2, Rocket League, Fortnite in še druge." },
-            { title: "Hitro omrezje", desc: "Stabilna povezava in tehnična podpora." },
+            { title: "Več iger", desc: "CS2, Rocket League, Fortnite in še druge." },
+            { title: "Hitro omrežje", desc: "Stabilna povezava in tehnična podpora." },
           ].map((c) => (
             <div
               key={c.title}
