@@ -29,7 +29,7 @@ describe('Organizers Page', () => {
   it('should show organizer roles and classes', () => {
     // Check first organizer has correct details
     cy.get('.grid > div').first().within(() => {
-      cy.contains('.text-xs', 'Organizator1').should('exist')
+      cy.contains('.text-xs', 'Organizator 1').should('exist')
       cy.contains('.text-sm', 'Gal Štravs').should('exist')
       cy.contains('.text-xs', '4. TRA').should('exist')
     })
