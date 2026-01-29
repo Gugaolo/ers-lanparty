@@ -1,6 +1,5 @@
 // app/organizatorji/page.tsx
 
-import Footer from "../components/footer";
 import Header from "../components/header";
 import React from "react";
 

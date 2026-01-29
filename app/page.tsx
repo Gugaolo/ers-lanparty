@@ -1,7 +1,6 @@
 // app/page.tsx
 import Image from "next/image";
 import Link from "next/link";
-import NavUser from "./components/NavUser";
 import { SCHEDULE } from "./data/schedule";
 import Header from "./components/header";
 

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { createGroup, type FormState } from './actions';
 import { MultiSelect } from '@/app/components/MultiSelect';
-import Header from '@/app/components/header';
 
 const COLORS = {
   primary: '#00F6FF',

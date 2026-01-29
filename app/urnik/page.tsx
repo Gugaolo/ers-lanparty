@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { SCHEDULE } from "../data/schedule";
-import Footer from "../components/footer";
 import React from "react";
 import Header from "../components/header";
 

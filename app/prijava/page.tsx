@@ -2,7 +2,6 @@
 import FormClient from './FormClient';
 import { supabaseServer } from '@/lib/supabaseServer';
 import Header from '@/app/components/header';
-import Footer from '../components/footer';
 
 const COLORS = {
   primary: "#00F6FF",
@@ -19,7 +18,7 @@ type Game = {
 };
 
 export default async function PrijavaPage() {
-  const { data: games, error } = await supabaseServer
+  const { data: games } = await supabaseServer
     .from('games')
     .select('id, game_name')
     .order('created_at', { ascending: true });
@@ -38,13 +37,13 @@ export default async function PrijavaPage() {
     >
       < Header />
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
-        <a
+        <link
           href="/"
           className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
           style={{ backgroundColor: COLORS.accent }}
         >
           Domov
-        </a>
+        </link>
 
         <h1 className="mt-4 text-4xl font-extrabold leading-tight">
           Prijava ekipe <span style={{ color: COLORS.accent }}>ERŠ RŠCV</span>

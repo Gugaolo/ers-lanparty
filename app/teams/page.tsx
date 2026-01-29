@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
 import React from 'react';
 import Header from '../components/header';
-import Footer from '../components/footer';
 
 const COLORS = {
   primary: '#00F6FF',
@@ -165,13 +164,13 @@ export default async function TeamsPage() {
               )}
             </tbody>
           </table>
-          <a
+          <link
             href="/"
             className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
             style={{ backgroundColor: COLORS.accent }}
           >
             Domov
-          </a>
+          </link>
         </div>
 
         {myGroup && (
