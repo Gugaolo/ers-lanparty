@@ -1,6 +1,6 @@
 name: Cypress E2E Tests
 
-# Trigger this workflow on push to master, development, testing, or on pull requests
+# Trigger workflow on push to main branches or PRs
 on:
   push:
     branches: [ master, development, testing ]
@@ -9,17 +9,20 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
     steps:
-      # 1️⃣ Checkout your code
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
+      # 2️⃣ Setup Node.js >=20.9
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.9.0   # Next.js requires >=20.9.0
+          node-version: 20.9.0
           cache: 'npm'
 
       # 3️⃣ Install dependencies
@@ -34,10 +37,10 @@ jobs:
       - name: Start production server
         run: npm start &
 
-      # 6️⃣ Wait for the server to respond
+      # 6️⃣ Wait for server to respond
       - name: Wait for localhost
         run: npx wait-on http://localhost:3000 --timeout 60000
 
-      # 7️⃣ Run Cypress headless
-      - name: Run Cypress tests
+      # 7️⃣ Run Cypress headless tests
+      - name: Run Cypress
         run: npx cypress run
