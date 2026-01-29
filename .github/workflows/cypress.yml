@@ -3,7 +3,7 @@ name: Cypress E2E Tests
 # Trigger this workflow on push to main or on pull requests
 on:
   push:
-    branches: [ main, development, testing ]
+    branches: [ master, development, testing ]
   pull_request:
 
 jobs:
