@@ -148,12 +148,12 @@ export default async function TeamsPage() {
                       </td>
                       <td className="whitespace-nowrap px-4 py-4 text-sm text-white/90">
                         {myGroup && g.id === myGroup.id ? (
-                          <Link
+                          <a
                             href="/teams/edit"
                             className="rounded-md border border-white/25 px-3 py-1 text-xs font-semibold text-white hover:bg-white/10"
                           >
                             Uredi
-                          </Link>
+                          </a>
                         ) : (
                           <span className="text-white/40">—</span>
                         )}
@@ -164,21 +164,21 @@ export default async function TeamsPage() {
               )}
             </tbody>
           </table>
-          <link
+          <a
             href="/"
             className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
             style={{ backgroundColor: COLORS.accent }}
           >
             Domov
-          </link>
+          </a>
         </div>
 
         {myGroup && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
             Urejaš lahko samo svojo ekipo. Klikni{' '}
-            <Link href="/teams/edit" className="font-semibold underline">
+            <a href="/teams/edit" className="font-semibold underline">
               Uredi ekipo
-            </Link>{' '}
+            </a>{' '}
             za spremembe.
           </div>
         )}
