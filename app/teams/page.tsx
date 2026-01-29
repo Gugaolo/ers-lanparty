@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
+import React from 'react';
+import Header from '../components/header';
+import Footer from '../components/footer';
 
 const COLORS = {
   primary: '#00F6FF',
@@ -82,6 +85,7 @@ export default async function TeamsPage() {
 )`,
       }}
     >
+      <Header />
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
         <h1 className="text-4xl font-extrabold leading-tight">
           LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>

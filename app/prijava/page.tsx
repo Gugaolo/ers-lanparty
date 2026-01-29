@@ -1,6 +1,8 @@
 // app/prijava/page.tsx
 import FormClient from './FormClient';
 import { supabaseServer } from '@/lib/supabaseServer';
+import Header from '@/app/components/header';
+import Footer from '../components/footer';
 
 const COLORS = {
   primary: "#00F6FF",
@@ -22,8 +24,6 @@ export default async function PrijavaPage() {
     .select('id, game_name')
     .order('created_at', { ascending: true });
 
-  if (error) console.error('Napaka pri branju iger:', error);
-
   const gameOptions: Game[] = games ?? [];
 
   return (
@@ -36,6 +36,7 @@ export default async function PrijavaPage() {
         )`,
       }}
     >
+      < Header />
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
         <a
           href="/"
