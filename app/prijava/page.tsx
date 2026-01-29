@@ -2,6 +2,7 @@
 import FormClient from './FormClient';
 import { supabaseServer } from '@/lib/supabaseServer';
 import Header from '@/app/components/header';
+import Link from 'next/link'; // Add this import
 
 const COLORS = {
   primary: "#00F6FF",
@@ -35,15 +36,16 @@ export default async function PrijavaPage() {
         )`,
       }}
     >
-      < Header />
+      <Header />
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
-        <link
+        {/* FIXED: Use Link component instead of link element */}
+        <Link
           href="/"
           className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
           style={{ backgroundColor: COLORS.accent }}
         >
           Domov
-        </link>
+        </Link>
 
         <h1 className="mt-4 text-4xl font-extrabold leading-tight">
           Prijava ekipe <span style={{ color: COLORS.accent }}>ERŠ RŠCV</span>
