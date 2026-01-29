@@ -37,13 +37,15 @@ export default function SignupPage() {
     setLoading(true);
     setMessage(null);
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
 
     if (error) {
       setMessage(`Napaka: ${error.message}`);
+    } else if (data?.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+      setMessage("Racun s tem e-mailom ze obstaja. Prijavi se ali uporabi drug e-mail.");
     } else {
       setMessage("Profil ustvarjen. Preveri e-mail (ce je zahtevana potrditev) in nato se prijavi.");
     }
@@ -140,4 +142,3 @@ export default function SignupPage() {
     </main>
   );
 }
-
