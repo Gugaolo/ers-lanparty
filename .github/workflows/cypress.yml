@@ -2,7 +2,7 @@ name: Cypress E2E Tests
 
 on:
   push:
-    branches: [ master, development, testing ]
+    branches: [master, development, testing]
   pull_request:
 
 jobs:
@@ -18,51 +18,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js v20 with pnpm
-      - name: Setup Node.js and pnpm
+      # 2️⃣ Setup Node.js v20 with pnpm cache
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      # 3️⃣ Install pnpm explicitly (not just with corepack)
+      # 3️⃣ Install pnpm
       - name: Install pnpm
         run: npm install -g pnpm
 
-      # 4️⃣ Verify pnpm installation
-      - name: Verify pnpm
-        run: pnpm --version
-
-      # 5️⃣ Cache pnpm store for faster installs
-      - name: Cache pnpm dependencies
+      # 4️⃣ Cache dependencies
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: |
             ~/.pnpm-store
             node_modules
             **/node_modules
-          key: pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            pnpm-
+            ${{ runner.os }}-pnpm-
 
-      # 6️⃣ Install dependencies
+      # 5️⃣ Install dependencies
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
-      # 7️⃣ Build Next.js production app
+      # 6️⃣ Build Next.js production app
       - name: Build app
         run: pnpm run build
 
-      # 8️⃣ Start production server in background
+      # 7️⃣ Start production server in background
       - name: Start production server
         run: |
           pnpm start &
-          sleep 5  # Give server a moment to start
+          sleep 5
 
-      # 9️⃣ Wait for server to respond
+      # 8️⃣ Wait for server to respond
       - name: Wait for localhost
         run: npx wait-on http://localhost:3000 --timeout 60000
 
-      # 🔟 Run Cypress headless tests
+      # 9️⃣ Run Cypress headless tests
       - name: Run Cypress
         run: pnpm exec cypress run
