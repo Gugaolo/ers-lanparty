@@ -14,16 +14,16 @@ jobs:
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
     steps:
-      # 1️⃣ Checkout code
+      # 1️⃣ Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js >=20.9
+      # 2️⃣ Setup Node.js v20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.9.0
-          cache: 'pnpm'  # Use pnpm cache instead of npm
+          node-version: 20
+          cache: 'pnpm'
 
       # 3️⃣ Enable Corepack and install pnpm
       - name: Setup pnpm
@@ -31,22 +31,31 @@ jobs:
           corepack enable
           corepack prepare pnpm@latest --activate
 
-      # 4️⃣ Install dependencies with pnpm
+      # 4️⃣ Cache pnpm store for faster installs
+      - name: Cache pnpm store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-
+
+      # 5️⃣ Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # 5️⃣ Build Next.js production app
+      # 6️⃣ Build Next.js production app
       - name: Build app
         run: pnpm run build
 
-      # 6️⃣ Start production server in background
+      # 7️⃣ Start production server in background
       - name: Start production server
         run: pnpm start &
 
-      # 7️⃣ Wait for server to respond
+      # 8️⃣ Wait for server to respond
       - name: Wait for localhost
         run: npx wait-on http://localhost:3000 --timeout 60000
 
-      # 8️⃣ Run Cypress headless tests
+      # 9️⃣ Run Cypress headless tests
       - name: Run Cypress
         run: npx cypress run
