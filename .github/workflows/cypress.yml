@@ -1,6 +1,5 @@
 name: Cypress E2E Tests
 
-# Trigger workflow on push to main branches or PRs
 on:
   push:
     branches: [ master, development, testing ]
@@ -24,24 +23,30 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.9.0
-          cache: 'npm'
+          cache: 'pnpm'  # Use pnpm cache instead of npm
 
-      # 3️⃣ Install dependencies
+      # 3️⃣ Enable Corepack and install pnpm
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      # 4️⃣ Install dependencies with pnpm
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
-      # 4️⃣ Build Next.js production app
+      # 5️⃣ Build Next.js production app
       - name: Build app
-        run: npm run build
+        run: pnpm run build
 
-      # 5️⃣ Start production server in background
+      # 6️⃣ Start production server in background
       - name: Start production server
-        run: npm start &
+        run: pnpm start &
 
-      # 6️⃣ Wait for server to respond
+      # 7️⃣ Wait for server to respond
       - name: Wait for localhost
         run: npx wait-on http://localhost:3000 --timeout 60000
 
-      # 7️⃣ Run Cypress headless tests
+      # 8️⃣ Run Cypress headless tests
       - name: Run Cypress
         run: npx cypress run
