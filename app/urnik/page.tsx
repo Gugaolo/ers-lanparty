@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { SCHEDULE } from "../data/schedule";
+import React from "react";
+import Header from "../components/header";
 
 const COLORS = {
   accent: "#1A8CFF",
@@ -18,28 +19,12 @@ export default function UrnikPage() {
         background: `radial-gradient(circle at 20% 20%, rgba(0, 224, 255, 0.2), ${COLORS.base} 60%)`,
       }}
     >
+      <Header />
       <section className="mx-auto max-w-6xl px-6 pb-14 pt-12">
-        <Link
-          href="/"
-          className="inline-block rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
-          style={{
-            backgroundColor: COLORS.accent,
-            boxShadow: "0 0 18px rgba(0, 128, 255, 0.4)",
-          }}
-        >
-          Domov
-        </Link>
-
         <div className="mt-6">
-          <p className="text-sm uppercase tracking-[0.25em] text-white/60">
-            ERŠ ŠCV LAN PARTY
-          </p>
           <h1 className="mt-2 text-4xl font-extrabold leading-tight sm:text-5xl">
             Urnik dogodka
           </h1>
-          <p className="mt-3 text-white/80 text-lg">
-            3-dnevni LAN Party - ERŠ ŠCV
-          </p>
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">

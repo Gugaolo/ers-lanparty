@@ -102,7 +102,7 @@ export async function createGroup(
     }
   }
 
-  const payload: Record<string, any> = {
+  const payload: Record<string, string | null> = {
     group_name,
     members,
     games,

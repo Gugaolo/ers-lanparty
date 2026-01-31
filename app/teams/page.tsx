@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
+import React from 'react';
+import Header from '../components/header';
 
 const COLORS = {
   primary: '#00F6FF',
@@ -82,6 +84,7 @@ export default async function TeamsPage() {
 )`,
       }}
     >
+      <Header />
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
         <h1 className="text-4xl font-extrabold leading-tight">
           LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
@@ -145,12 +148,12 @@ export default async function TeamsPage() {
                       </td>
                       <td className="whitespace-nowrap px-4 py-4 text-sm text-white/90">
                         {myGroup && g.id === myGroup.id ? (
-                          <Link
+                          <a
                             href="/teams/edit"
                             className="rounded-md border border-white/25 px-3 py-1 text-xs font-semibold text-white hover:bg-white/10"
                           >
                             Uredi
-                          </Link>
+                          </a>
                         ) : (
                           <span className="text-white/40">—</span>
                         )}
@@ -173,9 +176,9 @@ export default async function TeamsPage() {
         {myGroup && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
             Urejaš lahko samo svojo ekipo. Klikni{' '}
-            <Link href="/teams/edit" className="font-semibold underline">
+            <a href="/teams/edit" className="font-semibold underline">
               Uredi ekipo
-            </Link>{' '}
+            </a>{' '}
             za spremembe.
           </div>
         )}
