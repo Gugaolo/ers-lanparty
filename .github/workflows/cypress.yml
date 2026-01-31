@@ -14,51 +14,38 @@ jobs:
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
     steps:
-      # 1️⃣ Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js v20 with pnpm
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: 'npm'
 
-      # 3️⃣ Install pnpm
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      # 4️⃣ Cache dependencies
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: |
-            ~/.pnpm-store
+            ~/.npm
             node_modules
-            **/node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-
+            ${{ runner.os }}-node-
 
-      # 5️⃣ Install dependencies (REMOVED --frozen-lockfile)
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci  # Uses package-lock.json
 
-      # 6️⃣ Build Next.js production app
       - name: Build app
-        run: pnpm run build
+        run: npm run build
 
-      # 7️⃣ Start production server in background
       - name: Start production server
         run: |
-          pnpm start &
+          npm start &
           sleep 5
 
-      # 8️⃣ Wait for server to respond
       - name: Wait for localhost
         run: npx wait-on http://localhost:3000 --timeout 60000
 
-      # 9️⃣ Run Cypress headless tests
       - name: Run Cypress
-        run: pnpm exec cypress run
+        run: npx cypress run
