@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js v20 with pnpm cache
+      # 2️⃣ Setup Node.js v20 with pnpm
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -41,7 +41,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      # 5️⃣ Install dependencies
+      # 5️⃣ Install dependencies (REMOVED --frozen-lockfile)
       - name: Install dependencies
         run: pnpm install
 
