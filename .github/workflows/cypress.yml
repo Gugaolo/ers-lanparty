@@ -18,44 +18,51 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js v20
-      - name: Setup Node.js
+      # 2️⃣ Setup Node.js v20 with pnpm
+      - name: Setup Node.js and pnpm
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      # 3️⃣ Enable Corepack and install pnpm
-      - name: Setup pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
+      # 3️⃣ Install pnpm explicitly (not just with corepack)
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      # 4️⃣ Cache pnpm store for faster installs
-      - name: Cache pnpm store
+      # 4️⃣ Verify pnpm installation
+      - name: Verify pnpm
+        run: pnpm --version
+
+      # 5️⃣ Cache pnpm store for faster installs
+      - name: Cache pnpm dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.pnpm-store
-          key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: |
+            ~/.pnpm-store
+            node_modules
+            **/node_modules
+          key: pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            pnpm-store-
+            pnpm-
 
-      # 5️⃣ Install dependencies
+      # 6️⃣ Install dependencies
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      # 6️⃣ Build Next.js production app
+      # 7️⃣ Build Next.js production app
       - name: Build app
         run: pnpm run build
 
-      # 7️⃣ Start production server in background
+      # 8️⃣ Start production server in background
       - name: Start production server
-        run: pnpm start &
+        run: |
+          pnpm start &
+          sleep 5  # Give server a moment to start
 
-      # 8️⃣ Wait for server to respond
+      # 9️⃣ Wait for server to respond
       - name: Wait for localhost
         run: npx wait-on http://localhost:3000 --timeout 60000
 
-      # 9️⃣ Run Cypress headless tests
+      # 🔟 Run Cypress headless tests
       - name: Run Cypress
-        run: npx cypress run
+        run: pnpm exec cypress run
