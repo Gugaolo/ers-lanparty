@@ -65,7 +65,7 @@ export default function Home() {
 
         <div className="relative h-64 w-full sm:h-96">
           <Image
-            src="/lan_party_logo.png"
+            src="/Lan - logo - krog2.png"
             alt="LAN party illustration"
             fill
             className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.35)]"
@@ -190,7 +190,7 @@ export default function Home() {
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6">
           <h2 className="text-xl font-bold">Pravila & oprema</h2>
           <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-white/85">
-            <li>Prinesi lasten raunalnik/konzolo, periferijo in razdelilec.</li>
+            <li>Prinesi lasten računalnik/konzolo, periferijo in razdelilec.</li>
             <li>Spoštuj fair-play in navodila organizatorja.</li>
             <li>Alkohol in vandalizem nista dovoljena.</li>
           </ul>
@@ -199,6 +199,23 @@ export default function Home() {
             className="mt-4 inline-block rounded-md border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
           >
             Poglej celotna pravila
+          </Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 pb-12">
+        <div className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center">
+          <h2 className="text-lg font-semibold">Povej nam svoje mnenje</h2>
+          <p className="mt-2 text-sm text-white/80">
+            Pritožbe, predlogi za izboljšave ali igre, ki jih želiš na dogodku.
+          </p>
+          <Link
+            href="https://forms.office.com/Pages/ResponsePage.aspx?id=ISkj9tfQGkye7g2hUhMATYI1De8DCA9Frq0rEy7u_61URTVTQ1AzSjU4MTRRNFNSVVVTS0NVM0hVNy4u"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block rounded-md border border-white/30 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/10"
+          >
+            Predlogi in pritožbe
           </Link>
         </div>
       </section>
