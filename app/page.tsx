@@ -108,7 +108,7 @@ export default function Home() {
         {/* Hero ilustracija */}
         <div className="relative h-64 w-full sm:h-96">
           <Image
-            src="/lan_party_logo.png"
+            src="/Lan - logo - krog2.png"
             alt="LAN party illustration"
             fill
             className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.35)]"
