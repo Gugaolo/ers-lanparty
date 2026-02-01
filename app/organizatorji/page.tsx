@@ -1,5 +1,8 @@
 // app/organizatorji/page.tsx
 
+import Header from "../components/header";
+import React from "react";
+
 const COLORS = {
   primary: "#00E0FF",
   accent: "#1A8CFF",
@@ -50,19 +53,9 @@ export default function OrganizatorjiPage() {
         background: `radial-gradient(circle at top, rgba(0, 224, 255, 0.25), ${COLORS.dark} 70%)`,
       }}
     >
-      {/* Header */}
-      <section className="mx-auto max-w-6xl px-6 pb-4 pt-10">
-        <a
-          href="/"
-          className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
-          style={{
-            backgroundColor: COLORS.accent,
-            boxShadow: "0 0 15px rgba(0, 128, 255, 0.5)",
-          }}
-        >
-          ← Domov
-        </a>
+      <Header />
 
+      <section className="mx-auto max-w-6xl px-6 pb-4 pt-10">
         <h1 className="mt-4 text-4xl font-extrabold leading-tight">
           Organizatorji{" "}
           <span style={{ color: COLORS.accent }}>LAN Party ERŠ</span>
@@ -105,14 +98,7 @@ export default function OrganizatorjiPage() {
               </div>
             ))}
           </div>
-
         </div>
-
-        {/* Accent črta */}
-        <div
-          className="mt-6 h-1 w-24 rounded-full"
-          style={{ backgroundColor: COLORS.primary }}
-        />
       </section>
     </main>
   );
