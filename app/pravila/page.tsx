@@ -6,11 +6,11 @@ import Header from "../components/header";
 
 const COLORS = {
   primary: "#00F6FF",  // neon modra — glavni poudarek
-  accent:  "#1A8CFF",  // turkizna neonska
+  accent: "#1A8CFF",  // turkizna neonska
   secondary: "#7BCBFF", // mehka svetla modra (za prelive, hoverje)
-  dark:    "#02040A",  // ozadje strani
+  dark: "#02040A",  // ozadje strani
   darkSoft: "#0A0F1A", // kartice / sekcije
-  light:   "#E6F7FF",  // svetla modra za kontrastne elemente
+  light: "#E6F7FF",  // svetla modra za kontrastne elemente
 };
 
 export default function PravilaPage() {
@@ -138,7 +138,7 @@ export default function PravilaPage() {
               vidni na fotografijah ali videu.
             </li>
           </ul>
-
+          
           <p className="mt-6 text-sm text-white/70">
             Organizator si pridržuje pravico do spremembe pravil. Vsa vprašanja
             ali nejasnosti glede pravil se rešujejo pri organizatorjih dogodka.
