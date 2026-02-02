@@ -22,7 +22,7 @@ describe('Homepage', () => {
   it('shows event info badges', () => {
     const badges = [
       'Lokacija: Gaudeamus',
-      'Datum: 20. - 22. Marec',
+      'Datum: 20. - 21. Marec',
       'Vstop: brezplačno'
     ];
 
