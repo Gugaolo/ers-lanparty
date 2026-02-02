@@ -58,7 +58,7 @@ export default function Home() {
 
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="rounded-md bg-white/10 px-3 py-2">Lokacija: Gaudeamus</div>
-            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 20. - 22. Marec</div>
+            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 20. - 21. Marec</div>
             <div className="rounded-md bg-white/10 px-3 py-2">Vstop: brezplačno</div>
           </div>
         </div>

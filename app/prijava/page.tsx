@@ -1,8 +1,7 @@
-// app/prijava/page.tsx
 import FormClient from './FormClient';
 import { supabaseServer } from '@/lib/supabaseServer';
 import Header from '@/app/components/header';
-import Link from 'next/link'; // Add this import
+import Link from 'next/link'; 
 
 const COLORS = {
   primary: "#00F6FF",
@@ -38,7 +37,6 @@ export default async function PrijavaPage() {
     >
       <Header />
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
-        {/* FIXED: Use Link component instead of link element */}
         <Link
           href="/"
           className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
