@@ -1,26 +1,30 @@
-// ***********************************************************
-// This example support/component.ts is processed and
-// loaded automatically before your test files.
-//
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
-//
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
-
-// Import commands.js using ES2015 syntax:
-import './commands'
-// This imports the type declarations
-import './index.d'
+// cypress/support/component.ts
 
 import { mount } from 'cypress/react'
 
+// Augment the Cypress namespace to include type definitions for
+// your custom command.
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      mount: typeof mount
+    }
+  }
+  interface Window {
+    next: {
+      navigation: Record<string, unknown>
+      headers: Record<string, unknown>
+    }
+  }
+}
+
 Cypress.Commands.add('mount', mount)
 
-// Example use:
-// cy.mount(<MyComponent />)
+// Stub next/navigation and next/headers at the window level
+// to prevent webpack from trying to load server-only modules
+if (typeof window !== 'undefined') {
+  window.next = {
+    navigation: {},
+    headers: {},
+  } as any
+}
