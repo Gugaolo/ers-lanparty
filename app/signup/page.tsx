@@ -99,44 +99,44 @@ export default function SignupPage() {
           </button>
 
           <div className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur">
-  <form className="space-y-4" onSubmit={handleSignUp} noValidate>
-    <div>
-      <label className="text-xs uppercase tracking-wide text-white/70">
-        E-mail
-      </label>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="mt-2 w-full rounded-md bg-black/30 px-3 py-2 text-sm outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-blue-400"
-        placeholder="ime@primer.si"
-      />
-    </div>
-    <div>
-      <label className="text-xs uppercase tracking-wide text-white/70">
-        Geslo
-      </label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        className="mt-2 w-full rounded-md bg-black/30 px-3 py-2 text-sm outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-blue-400"
-        placeholder="********"
-      />
-    </div>
-    <button
-      type="submit"
-      disabled={loading}
-      className="w-full rounded-md bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15 disabled:opacity-50"
-    >
-      {loading ? "Ustvarjam..." : "Ustvari profil"}
-    </button>
-  </form>
-</div>
-</div>
-<div className="mt-4 text-sm text-white/80"> Že imaš račun?{" "} <Link href="/login" className="font-semibold text-blue-300 hover:underline"> Pojdi na prijavo </Link></div>
+            <form className="space-y-4" onSubmit={handleSignUp} noValidate>
+              <div>
+                <label className="text-xs uppercase tracking-wide text-white/70">
+                  E-mail
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="mt-2 w-full rounded-md bg-black/30 px-3 py-2 text-sm outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-blue-400"
+                  placeholder="ime@primer.si"
+                />
+              </div>
+              <div>
+                <label className="text-xs uppercase tracking-wide text-white/70">
+                  Geslo
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="mt-2 w-full rounded-md bg-black/30 px-3 py-2 text-sm outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-blue-400"
+                  placeholder="********"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-md bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15 disabled:opacity-50"
+              >
+                {loading ? "Ustvarjam..." : "Ustvari profil"}
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="mt-4 text-sm text-white/80"> Že imaš račun?{" "} <Link href="/login" className="font-semibold text-blue-300 hover:underline"> Pojdi na prijavo </Link></div>
         {message && (
           <p className="mt-4 rounded-lg bg-white/5 px-4 py-3 text-sm text-white/90">
             {message}
