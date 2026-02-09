@@ -9,11 +9,13 @@ export type UpdateFormState = {
   success: boolean;
 };
 
+// Server action: validates and updates team data
 export async function updateGroup(
   _prevState: UpdateFormState,
   formData: FormData
 ): Promise<UpdateFormState> {
   const supabase = await createSupabaseServerClient();
+  // Verify user is authenticated
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
   if (authError || !authData?.user) {
@@ -65,6 +67,7 @@ export async function updateGroup(
     return { success: false, error: 'Ekipe ni bilo mogoče najti.' };
   }
 
+  // Only allow owner to edit their team
   if (existingGroup.owner_id !== user.id) {
     return { success: false, error: 'To ni tvoja ekipa, urejanje ni dovoljeno.' };
   }
@@ -87,6 +90,7 @@ export async function updateGroup(
     return { success: false, error: 'Ekipa s tem imenom že obstaja.' };
   }
 
+  // Handle optional logo file upload to Supabase Storage
   let logo_path: string | null | undefined = existingGroup.logo_path ?? null;
   if (logo_file instanceof File && logo_file.size > 0) {
     try {

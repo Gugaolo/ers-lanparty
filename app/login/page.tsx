@@ -10,6 +10,7 @@ const COLORS = {
   dark: "#02040A",
 };
 
+// User login page with email/password and Google OAuth options
 export default function LoginPage() {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
@@ -59,7 +60,7 @@ export default function LoginPage() {
         router.push("/profile");
       }, 1500);
     } else if (error) {
-      // Custom error messages in Slovene
+      // Translate error messages to Slovene for user feedback
       let errorMessage = "Prišlo je do napake pri prijavi.";
       
       switch (error.message) {
@@ -100,7 +101,7 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  // Clear specific field error when user starts typing
+  // Clear email error when user starts editing
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (errors.email) {

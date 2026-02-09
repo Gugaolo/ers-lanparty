@@ -14,6 +14,7 @@ type UserInfo = {
   id: string;
 };
 
+// User profile page showing email and sign-out option
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<UserInfo | null>(null);
