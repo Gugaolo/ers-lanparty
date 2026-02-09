@@ -52,12 +52,13 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
 
   return (
     <div className="rounded-2xl border border-white/15 bg-white/5 p-6 shadow-xl backdrop-blur sm:p-8">
+      
       <h2 className="text-xl font-semibold">Podatki o ekipi</h2>
       <p className="mt-1 text-sm text-white/70">Polja označena z * so obvezna.</p>
 
       {!userEmail && (
         <div className="mt-4 rounded-md border border-yellow-400/30 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-50">
-          Za oddajo prijave se najprej prijavi ali ustvari profil.
+          Za oddajo prijave se najprej prijavi ali ustvariti profil.
           <div className="mt-3 flex gap-2">
             <Link
               href="/login"
@@ -121,7 +122,7 @@ export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
         </div>
 
         {/* Igre – multi-select */}
-        <div>
+        <div data-testid="multi-select">
           <label htmlFor="games" className="block text-sm font-medium text-white/90">
             Igre *
           </label>

@@ -1,8 +1,8 @@
 // app/page.tsx
 import Image from "next/image";
 import Link from "next/link";
-import NavUser from "./components/NavUser";
 import { SCHEDULE } from "./data/schedule";
+import Header from "./components/header";
 
 const COLORS = {
   primary: "#00F6FF",
@@ -26,48 +26,7 @@ export default function Home() {
 )`,
       }}
     >
-      {/* NAV */}
-      <nav className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/ERSLogotip.png"
-            alt="ERŠ ŠCV"
-            width={40}
-            height={40}
-            priority
-          />
-          <span className="text-lg font-semibold tracking-tight">
-            ERŠ ŠCV LAN PARTY
-          </span>
-        </div>
-        <div className="hidden gap-3 sm:flex">
-          <Link href="#igre" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-            Igre
-          </Link>
-          <Link href="/teams" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-            Ekipe
-          </Link>
-          <Link href="/urnik" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-            Urnik
-          </Link>
-          <Link href="#pravila" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-            Pravila
-          </Link>
-          <NavUser />
-        </div>
-        {/* Mobile quick links */}
-        <div className="flex gap-2 overflow-x-auto sm:hidden">
-          <Link href="/prijava" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
-            Prijava ekipe
-          </Link>
-          <Link href="/teams" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
-            Ekipe
-          </Link>
-          <Link href="/login" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
-            Prijava
-          </Link>
-        </div>
-      </nav>
+      <Header />
 
       {/* HERO */}
       <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-10 sm:grid-cols-2 sm:pt-16">
@@ -97,7 +56,6 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Info trak */}
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="rounded-md bg-white/10 px-3 py-2">Lokacija: Gaudeamus</div>
             <div className="rounded-md bg-white/10 px-3 py-2">Datum: 20. - 21. Marec</div>
@@ -105,7 +63,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Hero ilustracija */}
         <div className="relative h-64 w-full sm:h-96">
           <Image
             src="/Lan - logo - krog2.png"
@@ -117,7 +74,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HIGHLIGHTS */}
       <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="grid gap-6 md:grid-cols-3">
           {[
@@ -263,20 +219,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="border-t border-white/10 bg-black/30">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 sm:flex-row">
-          <p className="text-sm text-white/70">
-            © {new Date().getFullYear()} ERŠ ŠCV LAN Party
-          </p>
-          <div className="flex items-center gap-3 text-sm">
-            <Link href="/kontakt" className="hover:underline">Kontakt</Link>
-            <span className="opacity-40">•</span>
-            <Link href="/organizatorji" className="hover:underline">Organizatorji</Link>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

@@ -1,12 +1,16 @@
+import React from "react";
+import Header from "../components/header";
+
+
 // app/pravila/page.tsx
 
 const COLORS = {
   primary: "#00F6FF",  // neon modra — glavni poudarek
-  accent:  "#1A8CFF",  // turkizna neonska
+  accent: "#1A8CFF",  // turkizna neonska
   secondary: "#7BCBFF", // mehka svetla modra (za prelive, hoverje)
-  dark:    "#02040A",  // ozadje strani
+  dark: "#02040A",  // ozadje strani
   darkSoft: "#0A0F1A", // kartice / sekcije
-  light:   "#E6F7FF",  // svetla modra za kontrastne elemente
+  light: "#E6F7FF",  // svetla modra za kontrastne elemente
 };
 
 export default function PravilaPage() {
@@ -20,16 +24,8 @@ export default function PravilaPage() {
 )`,
       }}
     >
-      {/* Header */}
+      <Header />
       <section className="mx-auto max-w-6xl px-6 pb-4 pt-10">
-        <a
-          href="/"
-          className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
-          style={{ backgroundColor: COLORS.accent }}
-        >
-          ← Domov
-        </a>
-
         <h1 className="mt-4 text-4xl font-extrabold leading-tight">
           Pravila <span style={{ color: COLORS.accent }}>LAN Party ERŠ ŠCV</span>
         </h1>
@@ -142,18 +138,12 @@ export default function PravilaPage() {
               vidni na fotografijah ali videu.
             </li>
           </ul>
-
+          
           <p className="mt-6 text-sm text-white/70">
             Organizator si pridržuje pravico do spremembe pravil. Vsa vprašanja
             ali nejasnosti glede pravil se rešujejo pri organizatorjih dogodka.
           </p>
         </div>
-
-        {/* accent črta */}
-        <div
-          className="mt-6 h-1 w-24 rounded-full"
-          style={{ backgroundColor: COLORS.accent }}
-        />
       </section>
     </main>
   );
