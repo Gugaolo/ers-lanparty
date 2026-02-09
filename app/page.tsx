@@ -100,7 +100,7 @@ export default function Home() {
           {/* Info trak */}
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="rounded-md bg-white/10 px-3 py-2">Lokacija: Gaudeamus</div>
-            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 20. - 22. Marec</div>
+            <div className="rounded-md bg-white/10 px-3 py-2">Datum: 20. - 21. Marec</div>
             <div className="rounded-md bg-white/10 px-3 py-2">Vstop: brezplačno</div>
           </div>
         </div>
@@ -186,7 +186,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          <div className="mt-6 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-2 mx-auto">
             {SCHEDULE.map((day) => (
               <div
                 key={day.name}

@@ -38,11 +38,11 @@ export default function UrnikPage() {
             Urnik dogodka
           </h1>
           <p className="mt-3 text-white/80 text-lg">
-            3-dnevni LAN Party - ERŠ ŠCV
+            2-dnevni LAN Party - ERŠ ŠCV
           </p>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
           {SCHEDULE.map((day) => (
             <article
               key={day.name}
