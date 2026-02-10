@@ -1,5 +1,4 @@
-// app/organizatorji/page.tsx
-
+// Organizer profiles page
 import Header from "../components/header";
 import React from "react";
 
@@ -17,6 +16,7 @@ type Organizer = {
   className: string;
 };
 
+// List of event organizers
 const ORGANIZERS: Organizer[] = [
   {
     role: "Organizator 1",

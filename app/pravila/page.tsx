@@ -1,16 +1,14 @@
+// Tournament rules and conduct guidelines page
 import React from "react";
 import Header from "../components/header";
 
-
-// app/pravila/page.tsx
-
 const COLORS = {
-  primary: "#00F6FF",  // neon modra — glavni poudarek
-  accent: "#1A8CFF",  // turkizna neonska
-  secondary: "#7BCBFF", // mehka svetla modra (za prelive, hoverje)
-  dark: "#02040A",  // ozadje strani
-  darkSoft: "#0A0F1A", // kartice / sekcije
-  light: "#E6F7FF",  // svetla modra za kontrastne elemente
+  primary: "#00F6FF",
+  accent: "#1A8CFF",
+  secondary: "#7BCBFF",
+  dark: "#02040A",
+  darkSoft: "#0A0F1A",
+  light: "#E6F7FF",
 };
 
 export default function PravilaPage() {
