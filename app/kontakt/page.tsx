@@ -1,5 +1,4 @@
-// app/kontakt/page.tsx
-
+// Contact information page with email and Discord server link
 import React from "react";
 import Header from "../components/header";
 

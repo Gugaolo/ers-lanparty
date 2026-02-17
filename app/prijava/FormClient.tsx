@@ -21,6 +21,7 @@ type Game = {
   game_name: string | null;
 };
 
+// Team registration form - collects team name, members, and game preferences
 export default function FormClient({ gameOptions }: { gameOptions: Game[] }) {
   const router = useRouter();
   const [userEmail, setUserEmail] = useState<string | null>(null);

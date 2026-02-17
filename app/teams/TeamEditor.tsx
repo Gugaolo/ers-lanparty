@@ -18,6 +18,7 @@ type GameOption = {
   game_name: string | null;
 };
 
+// Form component for editing existing team details
 export default function TeamEditor({
   team,
   games,

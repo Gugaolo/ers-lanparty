@@ -8,6 +8,7 @@ const COLORS = {
   accent: "#1A8CFF",
 };
 
+// User registration page with email/password and Google OAuth
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

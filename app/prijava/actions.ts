@@ -9,11 +9,13 @@ export type FormState = {
   success: boolean;
 };
 
+// Server action: validates, creates team, and uploads logo to Supabase Storage
 export async function createGroup(
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
   const supabase = await createSupabaseServerClient();
+  // Verify user authentication
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
   if (authError || !authData?.user) {
@@ -26,7 +28,7 @@ export async function createGroup(
   const leader_discord = (formData.get('leader_discord') || '').toString().trim();
   const logo_file = formData.get('logo_file');
 
-  // multi-select (več iger)
+  // Extract selected games from form data
   const gamesSelected = formData
     .getAll('games')
     .map((g) => g.toString().trim())
@@ -40,7 +42,7 @@ export async function createGroup(
     };
   }
 
-  // En profil -> ena ekipa
+  // Ensure one team per user
   const { data: existingByOwner, error: ownerCheckError } = await supabase
     .from('groups')
     .select('id')
@@ -59,7 +61,7 @@ export async function createGroup(
     return { success: false, error: 'Ta profil je že prijavil eno ekipo.' };
   }
 
-  // preveri, če ime ekipe že obstaja (case-insensitive)
+  // Check for duplicate team name (case-insensitive)
   const { data: existing, error: checkError } = await supabase
     .from('groups')
     .select('id')
