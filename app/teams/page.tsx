@@ -35,12 +35,13 @@ function logoUrlFromPath(path?: string | null) {
 export default async function TeamsPage() {
   const supabase = await createSupabaseServerClient();
 
-  const [{ data: authData }, { data, error }] = await Promise.all([
+  const [{ data: authData }, { data, error }, { data: profileData }] = await Promise.all([
     supabase.auth.getUser(),
     supabase
       .from('groups')
       .select('id, created_at, group_name, members, games, logo_path, owner_id, owner_email')
       .order('created_at', { ascending: false }),
+    supabase.from('profiles').select('role').maybeSingle(),
   ]);
 
   if (error) {
@@ -67,6 +68,8 @@ export default async function TeamsPage() {
   const groups: GroupRow[] = data ?? [];
   const userId = authData?.user?.id ?? null;
   const userEmail = authData?.user?.email ?? null;
+  const isAdmin = profileData?.role === 'admin';
+
   const myGroup =
     groups.find(
       (g) =>
@@ -87,9 +90,9 @@ export default async function TeamsPage() {
       <Header />
       <section className="mx-auto max-w-6xl px-6 pb-6 pt-10">
         <h1 className="text-4xl font-extrabold leading-tight">
-          LAN Party <span style={{ color: COLORS.accent }}>ERŠ ŠCV</span>
+          LAN Party <span style={{ color: COLORS.accent }}>ERS SCV</span>
         </h1>
-        <p className="mt-2 text-white/80">Seznam prijavljenih ekip in članov.</p>
+        <p className="mt-2 text-white/80">Seznam prijavljenih ekip in clanov.</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
@@ -100,7 +103,7 @@ export default async function TeamsPage() {
                 <th className="px-4 py-3">#</th>
                 <th className="px-4 py-3">Logo</th>
                 <th className="px-4 py-3">Ime ekipe</th>
-                <th className="px-4 py-3">Člani</th>
+                <th className="px-4 py-3">Clani</th>
                 <th className="px-4 py-3">Igre</th>
                 <th className="px-4 py-3">Ustvarjeno</th>
                 <th className="px-4 py-3">Uredi</th>
@@ -110,12 +113,15 @@ export default async function TeamsPage() {
               {groups.length === 0 ? (
                 <tr>
                   <td className="px-4 py-6 text-white/80" colSpan={7}>
-                    Trenutno ni vnešenih ekip.
+                    Trenutno ni vnesenih ekip.
                   </td>
                 </tr>
               ) : (
                 groups.map((g, i) => {
                   const logoUrl = logoUrlFromPath(g.logo_path);
+                  const canEdit = isAdmin || (!!myGroup && g.id === myGroup.id);
+                  const editHref = isAdmin ? `/teams/edit?id=${g.id}` : '/teams/edit';
+
                   return (
                     <tr key={g.id} className="hover:bg-white/5">
                       <td className="whitespace-nowrap px-4 py-4 text-sm">{i + 1}</td>
@@ -123,7 +129,7 @@ export default async function TeamsPage() {
                         <img
                           src={logoUrl || '/group_icon.jpg'}
                           alt="Logo ekipe"
-                          className="h-10 w-10 rounded-md object-cover border border-white/10 bg-black/40"
+                          className="h-10 w-10 rounded-md border border-white/10 bg-black/40 object-cover"
                         />
                       </td>
                       <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold">
@@ -147,15 +153,15 @@ export default async function TeamsPage() {
                           : '-'}
                       </td>
                       <td className="whitespace-nowrap px-4 py-4 text-sm text-white/90">
-                        {myGroup && g.id === myGroup.id ? (
-                          <a
-                            href="/teams/edit"
+                        {canEdit ? (
+                          <Link
+                            href={editHref}
                             className="rounded-md border border-white/25 px-3 py-1 text-xs font-semibold text-white hover:bg-white/10"
                           >
                             Uredi
-                          </a>
+                          </Link>
                         ) : (
-                          <span className="text-white/40">—</span>
+                          <span className="text-white/40">-</span>
                         )}
                       </td>
                     </tr>
@@ -164,21 +170,28 @@ export default async function TeamsPage() {
               )}
             </tbody>
           </table>
-          <a
+
+          <Link
             href="/"
-            className="inline-block m-[10px] rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
+            className="m-[10px] inline-block rounded-md px-4 py-2 text-sm font-semibold text-white shadow"
             style={{ backgroundColor: COLORS.accent }}
           >
             Domov
-          </a>
+          </Link>
         </div>
 
-        {myGroup && (
+        {isAdmin && (
+          <div className="mt-6 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-4 py-4 text-sm text-emerald-100">
+            Prijavljen si kot admin. Lahko urejas in brises vse ekipe.
+          </div>
+        )}
+
+        {!isAdmin && myGroup && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
-            Urejaš lahko samo svojo ekipo. Klikni{' '}
-            <a href="/teams/edit" className="font-semibold underline">
+            Urejas lahko samo svojo ekipo. Klikni{' '}
+            <Link href="/teams/edit" className="font-semibold underline">
               Uredi ekipo
-            </a>{' '}
+            </Link>{' '}
             za spremembe.
           </div>
         )}
@@ -189,20 +202,17 @@ export default async function TeamsPage() {
           </div>
         )}
 
-        {userId && !myGroup && (
+        {userId && !myGroup && !isAdmin && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
-            S tem profilom še ni prijavljene ekipe.{' '}
-            <a href="/prijava" className="font-semibold underline">
+            S tem profilom se ni prijavljene ekipe.{' '}
+            <Link href="/prijava" className="font-semibold underline">
               Prijavi ekipo
-            </a>{' '}
-            in jo boš lahko urejal na strani za urejanje.
+            </Link>{' '}
+            in jo bos lahko urejal na strani za urejanje.
           </div>
         )}
 
-        <div
-          className="mt-6 h-1 w-24 rounded-full"
-          style={{ backgroundColor: COLORS.accent }}
-        />
+        <div className="mt-6 h-1 w-24 rounded-full" style={{ backgroundColor: COLORS.accent }} />
       </section>
     </main>
   );

@@ -23,6 +23,7 @@ export async function createGroup(
   const user = authData.user;
   const group_name = (formData.get('group_name') || '').toString().trim();
   const members = (formData.get('members') || '').toString().trim();
+  const leader_discord = (formData.get('leader_discord') || '').toString().trim();
   const logo_file = formData.get('logo_file');
 
   // multi-select (več iger)
@@ -31,10 +32,11 @@ export async function createGroup(
     .map((g) => g.toString().trim())
     .filter(Boolean);
 
-  if (!group_name || !members || gamesSelected.length === 0) {
+  if (!group_name || !members || !leader_discord || gamesSelected.length === 0) {
     return {
       success: false,
-      error: 'Prosimo, izpolni vsa obvezna polja (ime ekipe, člani, vsaj 1 igra).',
+      error:
+        'Prosimo, izpolni vsa obvezna polja (ime ekipe, clani, Discord ime vodje, vsaj 1 igra).',
     };
   }
 
@@ -105,6 +107,7 @@ export async function createGroup(
   const payload: Record<string, string | null> = {
     group_name,
     members,
+    leader_discord,
     games,
     owner_id: user.id,
     owner_email: user.email ?? null,

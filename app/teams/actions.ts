@@ -9,6 +9,21 @@ export type UpdateFormState = {
   success: boolean;
 };
 
+export type DeleteFormState = {
+  error: string | null;
+  success: boolean;
+};
+
+async function isAdminUser(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, userId: string) {
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  return profile?.role === 'admin';
+}
+
 export async function updateGroup(
   _prevState: UpdateFormState,
   formData: FormData
@@ -24,6 +39,7 @@ export async function updateGroup(
   }
 
   const user = authData.user;
+  const isAdmin = await isAdminUser(supabase, user.id);
   const groupId = Number(formData.get('id'));
   if (!groupId || Number.isNaN(groupId)) {
     return { success: false, error: 'Manjka ID ekipe za urejanje.' };
@@ -65,7 +81,7 @@ export async function updateGroup(
     return { success: false, error: 'Ekipe ni bilo mogoče najti.' };
   }
 
-  if (existingGroup.owner_id !== user.id) {
+  if (existingGroup.owner_id !== user.id && !isAdmin) {
     return { success: false, error: 'To ni tvoja ekipa, urejanje ni dovoljeno.' };
   }
 
@@ -114,7 +130,7 @@ export async function updateGroup(
     }
   }
 
-  const { error: updateError } = await supabase
+  let updateQuery = supabase
     .from('groups')
     .update({
       group_name,
@@ -122,13 +138,81 @@ export async function updateGroup(
       games,
       logo_path,
     })
-    .eq('id', groupId)
-    .eq('owner_id', user.id);
+    .eq('id', groupId);
+
+  if (!isAdmin) {
+    updateQuery = updateQuery.eq('owner_id', user.id);
+  }
+
+  const { error: updateError } = await updateQuery;
 
   if (updateError) {
     return { success: false, error: 'Napaka pri shranjevanju sprememb. Poskusi znova.' };
   }
 
   revalidatePath('/teams');
+  return { success: true, error: null };
+}
+
+export async function deleteGroup(
+  _prevState: DeleteFormState,
+  formData: FormData
+): Promise<DeleteFormState> {
+  const supabase = await createSupabaseServerClient();
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !authData?.user) {
+    return {
+      success: false,
+      error: 'Za brisanje ekipe se najprej prijavi (profil / Google).',
+    };
+  }
+
+  const user = authData.user;
+  const isAdmin = await isAdminUser(supabase, user.id);
+  const groupId = Number(formData.get('id'));
+  if (!groupId || Number.isNaN(groupId)) {
+    return { success: false, error: 'Manjka ID ekipe za brisanje.' };
+  }
+
+  const { data: existingGroup, error: fetchError } = await supabase
+    .from('groups')
+    .select('id, owner_id, logo_path')
+    .eq('id', groupId)
+    .maybeSingle();
+
+  if (fetchError?.code === '42703') {
+    return {
+      success: false,
+      error:
+        'Tabela groups ne pozna stolpcev owner_id/logo_path. Dodaj stolpce owner_id uuid, owner_email text in logo_path text, nato poskusi znova.',
+    };
+  }
+
+  if (!existingGroup) {
+    return { success: false, error: 'Ekipe ni bilo mogoče najti.' };
+  }
+
+  if (existingGroup.owner_id !== user.id && !isAdmin) {
+    return { success: false, error: 'To ni tvoja ekipa, brisanje ni dovoljeno.' };
+  }
+
+  if (existingGroup.logo_path) {
+    await supabaseServer.storage.from('logos').remove([existingGroup.logo_path]);
+  }
+
+  let deleteQuery = supabase.from('groups').delete().eq('id', groupId);
+  if (!isAdmin) {
+    deleteQuery = deleteQuery.eq('owner_id', user.id);
+  }
+
+  const { error: deleteError } = await deleteQuery;
+
+  if (deleteError) {
+    return { success: false, error: 'Napaka pri brisanju ekipe. Poskusi znova.' };
+  }
+
+  revalidatePath('/teams');
+  revalidatePath('/teams/edit');
   return { success: true, error: null };
 }

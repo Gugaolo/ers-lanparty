@@ -26,12 +26,14 @@ describe('Team Signup Form', () => {
     // Check all form elements exist
     cy.get('input[name="group_name"]').should('exist')
     cy.get('textarea[name="members"]').should('exist')
+    cy.get('input[name="leader_discord"]').should('exist')
     cy.get('input[name="logo_file"]').should('exist')
     cy.get('button[type="submit"]').should('exist')
     
     // Check labels
     cy.contains('label', 'Ime ekipe *').should('exist')
     cy.contains('label', 'Člani ekipe *').should('exist')
+    cy.contains('label', 'Discord ime vodje ekipe *').should('exist')
     cy.contains('label', 'Logo ekipe').should('exist')
   })
 
@@ -60,6 +62,10 @@ describe('Team Signup Form', () => {
     cy.get('textarea[name="members"]')
       .type('Janez, Marija, Luka')
       .should('have.value', 'Janez, Marija, Luka')
+
+    cy.get('input[name="leader_discord"]')
+      .type('janez#1234')
+      .should('have.value', 'janez#1234')
     
     // Check submit button is now enabled
     cy.get('button[type="submit"]')

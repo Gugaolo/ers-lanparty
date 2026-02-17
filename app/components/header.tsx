@@ -1,60 +1,80 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import React, { useState } from 'react'
 import NavUser from './NavUser'
-import React from 'react'
 
 type HeaderProps = {
   NavUserComponent?: React.ComponentType
 }
 
+const baseLinkClass = 'rounded-md px-3 py-2 text-sm font-medium text-white/90 hover:bg-white/10'
+
 export default function Header({ NavUserComponent = NavUser }: HeaderProps) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const closeMenu = () => setIsOpen(false)
+
   return (
-    <nav className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-      <Link
-        href="/"
-        className="absolute left-0 top-0 flex h-16 w-full items-center bg-black/70 px-6 backdrop-blur sm:static sm:w-auto sm:bg-transparent"
-      >
-        <div className="flex items-center gap-3">
-          <Image
-            src="/ERSLogotip.png"
-            alt="ERŠ ŠCV"
-            width={40}
-            height={40}
-            priority
-          />
-          <span className="text-lg font-semibold tracking-tight">
-            ERŠ ŠCV LAN PARTY
-          </span>
+    <nav className="sticky top-0 z-50 border-b border-white/10 bg-black/75 backdrop-blur">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="flex h-16 items-center justify-between gap-3">
+          <Link href="/" className="flex min-w-0 items-center gap-3" onClick={closeMenu}>
+            <Image src="/ERSLogotip.png" alt="ERŠ ŠCV" width={36} height={36} priority />
+            <span className="truncate text-sm font-semibold tracking-tight text-white sm:text-lg">
+              ERŠ ŠCV LAN PARTY
+            </span>
+          </Link>
+
+          <button
+            type="button"
+            className="rounded-md border border-white/20 px-3 py-2 text-xs font-semibold text-white sm:hidden"
+            aria-expanded={isOpen}
+            aria-label="Odpri navigacijo"
+            onClick={() => setIsOpen((prev) => !prev)}
+          >
+            {isOpen ? 'Zapri' : 'Meni'}
+          </button>
+
+          <div className="hidden items-center gap-2 sm:flex">
+            <Link href="/#igre" className={baseLinkClass}>
+              Igre
+            </Link>
+            <Link href="/teams" className={baseLinkClass}>
+              Ekipe
+            </Link>
+            <Link href="/urnik" className={baseLinkClass}>
+              Urnik
+            </Link>
+            <Link href="/#pravila" className={baseLinkClass}>
+              Pravila
+            </Link>
+            <NavUserComponent />
+          </div>
         </div>
-      </Link>
 
-      <div className="hidden gap-3 sm:flex">
-        <Link href="./#igre" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-          Igre
-        </Link>
-        <Link href="/teams" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-          Ekipe
-        </Link>
-        <Link href="/urnik" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-          Urnik
-        </Link>
-        <Link href="./#pravila" className="rounded-md px-3 py-2 text-sm hover:bg-white/10">
-          Pravila
-        </Link>
-
-        <NavUserComponent />
-      </div>
-
-      <div className="flex gap-2 overflow-x-auto sm:hidden">
-        <Link href="/prijava" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
-          Prijava ekipe
-        </Link>
-        <Link href="/teams" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
-          Ekipe
-        </Link>
-        <Link href="/login" className="rounded-md bg-white/10 px-3 py-2 text-xs font-semibold text-white">
-          Prijava
-        </Link>
+        {isOpen && (
+          <div className="border-t border-white/10 py-3 sm:hidden">
+            <div className="grid gap-2">
+              <Link href="/#igre" className={baseLinkClass} onClick={closeMenu}>
+                Igre
+              </Link>
+              <Link href="/teams" className={baseLinkClass} onClick={closeMenu}>
+                Ekipe
+              </Link>
+              <Link href="/urnik" className={baseLinkClass} onClick={closeMenu}>
+                Urnik
+              </Link>
+              <Link href="/#pravila" className={baseLinkClass} onClick={closeMenu}>
+                Pravila
+              </Link>
+              <div className="pt-1 [&>div]:flex-wrap [&>div]:gap-2">
+                <NavUserComponent />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   )

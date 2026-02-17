@@ -49,6 +49,15 @@ export default function Home() {
               Prijavi ekipo
             </Link>
             <Link
+              href="https://discord.gg/Tr3TFd3XZe"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-md px-5 py-3 text-sm font-semibold text-white shadow"
+              style={{ backgroundColor: COLORS.accent, color: COLORS.light }}
+            >
+              Discord
+            </Link>
+            <Link
               href="#pravila"
               className="rounded-md border border-white/30 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/10"
             >
