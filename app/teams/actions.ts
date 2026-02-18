@@ -49,6 +49,7 @@ export async function updateGroup(
 
   const group_name = (formData.get('group_name') || '').toString().trim();
   const members = (formData.get('members') || '').toString().trim();
+  const leader_discord = (formData.get('leader_discord') || '').toString().trim();
   const logo_file = formData.get('logo_file');
 
   const gamesSelected = formData
@@ -56,10 +57,10 @@ export async function updateGroup(
     .map((g) => g.toString().trim())
     .filter(Boolean);
 
-  if (!group_name || !members || gamesSelected.length === 0) {
+  if (!group_name || !members || !leader_discord || gamesSelected.length === 0) {
     return {
       success: false,
-      error: 'Izpolni ime ekipe, člane in izberi vsaj eno igro.',
+      error: 'Izpolni ime ekipe, clane, Discord ime vodje in izberi vsaj eno igro.',
     };
   }
 
@@ -83,7 +84,7 @@ export async function updateGroup(
     return { success: false, error: 'Ekipe ni bilo mogoče najti.' };
   }
 
-  if (existingGroup.owner_id !== user.id) {
+  if (existingGroup.owner_id !== user.id && !isAdmin) {
     return { success: false, error: 'To ni tvoja ekipa, urejanje ni dovoljeno.' };
   }
 
@@ -138,6 +139,7 @@ export async function updateGroup(
     .update({
       group_name,
       members,
+      leader_discord,
       games,
       logo_path,
     })

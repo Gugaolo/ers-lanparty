@@ -9,6 +9,7 @@ type TeamData = {
   id: number;
   group_name: string | null;
   members: string | null;
+  leader_discord?: string | null;
   games: string | null;
   logo_path?: string | null;
 };
@@ -105,6 +106,21 @@ export default function TeamEditor({
             rows={3}
             defaultValue={team.members ?? ''}
             className="mt-2 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/60"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="leader_discord" className="block text-sm font-medium text-white/90">
+            Discord ime vodje ekipe *
+          </label>
+          <input
+            id="leader_discord"
+            name="leader_discord"
+            type="text"
+            required
+            defaultValue={team.leader_discord ?? ''}
+            className="mt-2 w-full rounded-md border border-white/20 bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/60"
+            placeholder="npr. uporabnik#1234"
           />
         </div>
 

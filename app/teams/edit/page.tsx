@@ -24,7 +24,7 @@ export default async function EditTeamPage({
       supabase.auth.getUser(),
       supabase
         .from('groups')
-        .select('id, group_name, members, games, logo_path, owner_id, owner_email')
+        .select('id, group_name, members, leader_discord, games, logo_path, owner_id, owner_email')
         .order('created_at', { ascending: false }),
       supabase.from('games').select('id, game_name').order('game_name', { ascending: true }),
       supabase.from('profiles').select('role').maybeSingle(),
