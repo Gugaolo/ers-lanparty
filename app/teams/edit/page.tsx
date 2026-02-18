@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import TeamEditor from '../TeamEditor';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
+import { getRole } from '@/lib/auth/getRole';
 
 type GameRow = {
   id: number;
@@ -19,7 +20,7 @@ export default async function EditTeamPage({
   const requestedGroupId = Number(params.id);
   const requestedGroupIdValid = Number.isFinite(requestedGroupId) && requestedGroupId > 0;
 
-  const [{ data: authData }, { data: groups }, { data: gamesData }, { data: profileData }] =
+  const [{ data: authData }, { data: groups }, { data: gamesData }, roleData] =
     await Promise.all([
       supabase.auth.getUser(),
       supabase
@@ -27,12 +28,12 @@ export default async function EditTeamPage({
         .select('id, group_name, members, leader_discord, games, logo_path, owner_id, owner_email')
         .order('created_at', { ascending: false }),
       supabase.from('games').select('id, game_name').order('game_name', { ascending: true }),
-      supabase.from('profiles').select('role').maybeSingle(),
+      getRole(),
     ]);
 
-  const userId = authData?.user?.id ?? null;
+  const userId = roleData.userId ?? authData?.user?.id ?? null;
   const userEmail = authData?.user?.email ?? null;
-  const isAdmin = profileData?.role === 'admin';
+  const isAdmin = roleData.isAdmin;
   const allGroups = groups ?? [];
 
   const myGroup =
@@ -91,8 +92,8 @@ export default async function EditTeamPage({
             {isAdmin ? (
               <>
                 Izberi ekipo na strani{' '}
-                <Link href="/teams" className="font-semibold underline">
-                  Ekipe
+                <Link href="/admin/teams" className="font-semibold underline">
+                  Admin ekipe
                 </Link>{' '}
                 in odpri urejanje prek gumba Uredi.
               </>

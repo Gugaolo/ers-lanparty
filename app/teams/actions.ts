@@ -15,7 +15,7 @@ export type DeleteFormState = {
 };
 
 async function isAdminUser(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, userId: string) {
-  const { data: profile } = await supabase
+  const { data: profile } = await supabaseServer
     .from('profiles')
     .select('role')
     .eq('user_id', userId)

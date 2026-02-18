@@ -1,0 +1,132 @@
+import Link from 'next/link';
+import Header from '@/app/components/header';
+import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
+
+type GroupRow = {
+  id: number;
+  created_at: string | null;
+  group_name: string | null;
+  members: string | null;
+  games: string | null;
+  logo_path?: string | null;
+};
+
+function logoUrlFromPath(path?: string | null) {
+  if (!path) return null;
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!base) return null;
+  return `${base}/storage/v1/object/public/logos/${path}`;
+}
+
+export default async function AdminTeamsPage() {
+  const supabase = await createSupabaseServerClient();
+  const { data: groups, error } = await supabase
+    .from('groups')
+    .select('id, created_at, group_name, members, games, logo_path')
+    .order('created_at', { ascending: false });
+  const rows: GroupRow[] = groups ?? [];
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-black text-white">
+        <Header />
+        <section className="mx-auto max-w-6xl px-6 py-10">
+          <h1 className="text-3xl font-bold">Admin ekipe</h1>
+          <p className="mt-4 rounded-lg bg-red-500/20 p-4 text-red-100">
+            Napaka pri branju ekip: {error.message}
+          </p>
+        </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-black text-white">
+      <Header />
+      <section className="mx-auto max-w-6xl px-6 py-10">
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="text-3xl font-bold">Admin upravljanje ekip</h1>
+          <Link
+            href="/teams"
+            className="rounded-md border border-white/25 px-4 py-2 text-sm font-semibold hover:bg-white/10"
+          >
+            Nazaj na ekipe
+          </Link>
+        </div>
+
+        <p className="mt-2 text-sm text-white/70">
+          Tukaj lahko admin ureja in briše katerokoli ekipo.
+        </p>
+
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/15 bg-white/5">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/10">
+              <tr className="text-left text-xs font-semibold uppercase tracking-wide text-white/90">
+                <th className="px-4 py-3">#</th>
+                <th className="px-4 py-3">Logo</th>
+                <th className="px-4 py-3">Ime ekipe</th>
+                <th className="px-4 py-3">Clani</th>
+                <th className="px-4 py-3">Igre</th>
+                <th className="px-4 py-3">Ustvarjeno</th>
+                <th className="px-4 py-3">Uredi</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10">
+              {rows.length === 0 ? (
+                <tr>
+                  <td className="px-4 py-6 text-white/80" colSpan={7}>
+                    Trenutno ni vnesenih ekip.
+                  </td>
+                </tr>
+              ) : (
+                rows.map((g, i) => {
+                  const logoUrl = logoUrlFromPath(g.logo_path);
+                  return (
+                    <tr key={g.id} className="hover:bg-white/5">
+                      <td className="whitespace-nowrap px-4 py-4 text-sm">{i + 1}</td>
+                      <td className="whitespace-nowrap px-4 py-4">
+                        <img
+                          src={logoUrl || '/group_icon.jpg'}
+                          alt="Logo ekipe"
+                          className="h-10 w-10 rounded-md border border-white/10 bg-black/40 object-cover"
+                        />
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold">
+                        {g.group_name ?? '-'}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-white/90">
+                        {g.members && g.members.trim().length > 0 ? g.members : '-'}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-white/90">
+                        {g.games && g.games.trim().length > 0 ? g.games : '-'}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-sm text-white/70">
+                        {g.created_at
+                          ? new Date(g.created_at).toLocaleString('sl-SI', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })
+                          : '-'}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-sm">
+                        <Link
+                          href={`/teams/edit?id=${g.id}`}
+                          className="rounded-md border border-white/25 px-3 py-1 text-xs font-semibold text-white hover:bg-white/10"
+                        >
+                          Uredi
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  );
+}

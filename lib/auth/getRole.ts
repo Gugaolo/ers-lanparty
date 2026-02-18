@@ -1,4 +1,5 @@
 import { createSupabaseServer } from '@/lib/supabase/server';
+import { supabaseServer } from '@/lib/supabaseServer';
 
 export type UserRole = 'user' | 'admin';
 
@@ -17,7 +18,8 @@ export async function getRole(): Promise<RoleResult> {
     return { userId: null, role: null, isAdmin: false };
   }
 
-  const { data: profile } = await supabase
+  // Use service-role server client to avoid false negatives when RLS/policies are misconfigured.
+  const { data: profile } = await supabaseServer
     .from('profiles')
     .select('role')
     .eq('user_id', userId)

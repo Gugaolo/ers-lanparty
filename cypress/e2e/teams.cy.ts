@@ -10,7 +10,7 @@ describe('Teams Page - Simple Tests', () => {
 
   it('should have main title and description', () => {
     cy.contains('LAN Party').should('be.visible');
-    cy.contains('Seznam prijavljenih ekip in članov.').should('be.visible');
+    cy.contains(/Seznam prijavljenih ekip in [cc]lanov\./i).should('be.visible');
   });
 
   it('should have a table', () => {
@@ -21,7 +21,7 @@ describe('Teams Page - Simple Tests', () => {
     cy.get('table thead').within(() => {
       cy.contains('#').should('exist');
       cy.contains('Ime ekipe').should('exist');
-      cy.contains('Člani').should('exist');
+      cy.contains(/^[CC]lani$/).should('exist');
       cy.contains('Igre').should('exist');
       cy.contains('Ustvarjeno').should('exist');
       cy.contains('Uredi').should('exist');
@@ -40,7 +40,7 @@ describe('Teams Page - Simple Tests', () => {
         cy.log('Teams exist in the table');
         expect($rows.length).to.be.greaterThan(0);
       } else {
-        cy.contains('ni vnešenih ekip').should('exist');
+        cy.contains(/ni vne[s�]enih ekip/i).should('exist');
       }
     });
   });

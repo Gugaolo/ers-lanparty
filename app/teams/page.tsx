@@ -35,13 +35,12 @@ function logoUrlFromPath(path?: string | null) {
 export default async function TeamsPage() {
   const supabase = await createSupabaseServerClient();
 
-  const [{ data: authData }, { data, error }, { data: profileData }] = await Promise.all([
+  const [{ data: authData }, { data, error }] = await Promise.all([
     supabase.auth.getUser(),
     supabase
       .from('groups')
       .select('id, created_at, group_name, members, games, logo_path, owner_id, owner_email')
       .order('created_at', { ascending: false }),
-    supabase.from('profiles').select('role').maybeSingle(),
   ]);
 
   if (error) {
@@ -68,7 +67,6 @@ export default async function TeamsPage() {
   const groups: GroupRow[] = data ?? [];
   const userId = authData?.user?.id ?? null;
   const userEmail = authData?.user?.email ?? null;
-  const isAdmin = profileData?.role === 'admin';
 
   const myGroup =
     groups.find(
@@ -119,8 +117,7 @@ export default async function TeamsPage() {
               ) : (
                 groups.map((g, i) => {
                   const logoUrl = logoUrlFromPath(g.logo_path);
-                  const canEdit = isAdmin || (!!myGroup && g.id === myGroup.id);
-                  const editHref = isAdmin ? `/teams/edit?id=${g.id}` : '/teams/edit';
+                  const canEdit = !!myGroup && g.id === myGroup.id;
 
                   return (
                     <tr key={g.id} className="hover:bg-white/5">
@@ -155,7 +152,7 @@ export default async function TeamsPage() {
                       <td className="whitespace-nowrap px-4 py-4 text-sm text-white/90">
                         {canEdit ? (
                           <Link
-                            href={editHref}
+                            href="/teams/edit"
                             className="rounded-md border border-white/25 px-3 py-1 text-xs font-semibold text-white hover:bg-white/10"
                           >
                             Uredi
@@ -180,13 +177,7 @@ export default async function TeamsPage() {
           </Link>
         </div>
 
-        {isAdmin && (
-          <div className="mt-6 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-4 py-4 text-sm text-emerald-100">
-            Prijavljen si kot admin. Lahko urejas in brises vse ekipe.
-          </div>
-        )}
-
-        {!isAdmin && myGroup && (
+        {myGroup && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
             Urejas lahko samo svojo ekipo. Klikni{' '}
             <Link href="/teams/edit" className="font-semibold underline">
@@ -202,7 +193,7 @@ export default async function TeamsPage() {
           </div>
         )}
 
-        {userId && !myGroup && !isAdmin && (
+        {userId && !myGroup && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
             S tem profilom se ni prijavljene ekipe.{' '}
             <Link href="/prijava" className="font-semibold underline">
