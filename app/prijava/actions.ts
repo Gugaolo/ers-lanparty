@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
 import { supabaseServer } from '@/lib/supabaseServer';
+import { TEAM_REGISTRATION_OPEN, TEAM_REGISTRATION_STATUS } from '@/lib/teamRegistration';
 
 export type FormState = {
   error: string | null;
@@ -11,9 +12,16 @@ export type FormState = {
 
 // Server action: validates, creates team, and uploads logo to Supabase Storage
 export async function createGroup(
-  prevState: FormState,
+  _prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
+  if (!TEAM_REGISTRATION_OPEN) {
+    return {
+      success: false,
+      error: `${TEAM_REGISTRATION_STATUS.title}. ${TEAM_REGISTRATION_STATUS.detail}`,
+    };
+  }
+
   const supabase = await createSupabaseServerClient();
   // Verify user authentication
   const { data: authData, error: authError } = await supabase.auth.getUser();
@@ -101,7 +109,7 @@ export async function createGroup(
       }
 
       logo_path = filePath;
-    } catch (_e) {
+    } catch {
       return { success: false, error: 'Pri nalaganju logotipa je prišlo do napake.' };
     }
   }

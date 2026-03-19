@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SCHEDULE } from "./data/schedule";
 import Header from "./components/header";
+import { TEAM_REGISTRATION_OPEN, TEAM_REGISTRATION_STATUS } from "@/lib/teamRegistration";
 
 const COLORS = {
   primary: "#00F6FF",
@@ -41,13 +42,19 @@ export default function Home() {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              href="/prijava"
-              className="rounded-md px-5 py-3 text-sm font-semibold text-white shadow"
-              style={{ backgroundColor: COLORS.accent }}
-            >
-              Prijavi ekipo
-            </Link>
+            {TEAM_REGISTRATION_OPEN ? (
+              <Link
+                href="/prijava"
+                className="rounded-md px-5 py-3 text-sm font-semibold text-white shadow"
+                style={{ backgroundColor: COLORS.accent }}
+              >
+                Prijavi ekipo
+              </Link>
+            ) : (
+              <div className="rounded-md border border-amber-300/35 bg-amber-300/10 px-5 py-3 text-sm font-semibold text-amber-50">
+                {TEAM_REGISTRATION_STATUS.title}
+              </div>
+            )}
             <Link
               href="https://discord.gg/Tr3TFd3XZe"
               target="_blank"
@@ -84,9 +91,39 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
+        {!TEAM_REGISTRATION_OPEN && (
+          <div className="mb-6 rounded-2xl border border-amber-300/30 bg-amber-300/10 p-5 text-amber-50 shadow-lg">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-100/80">
+              Status prijav
+            </p>
+            <h2 className="mt-2 text-2xl font-bold">{TEAM_REGISTRATION_STATUS.title}</h2>
+            <p className="mt-2 max-w-3xl text-sm text-amber-50/90">
+              {TEAM_REGISTRATION_STATUS.message} {TEAM_REGISTRATION_STATUS.detail}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link
+                href="/teams"
+                className="rounded-md bg-white/15 px-4 py-2 text-sm font-semibold text-white hover:bg-white/25"
+              >
+                Poglej ekipe
+              </Link>
+              <Link
+                href="/teams/edit"
+                className="rounded-md border border-white/25 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Profil in urejanje
+              </Link>
+            </div>
+          </div>
+        )}
         <div className="grid gap-6 md:grid-cols-3">
           {[
-            { title: "Ekipe in solo", desc: "Prijavi ekipo ali igraj samostojno." },
+            {
+              title: "Ekipe in solo",
+              desc: TEAM_REGISTRATION_OPEN
+                ? "Prijavi ekipo ali igraj samostojno."
+                : "Prijave novih ekip so zaprte, obstoječe ekipe pa lahko še vedno urejaš.",
+            },
             { title: "Več iger", desc: "CS2, Rocket League, Fortnite in še druge." },
             { title: "Hitro omrežje", desc: "Stabilna povezava in tehnična podpora." },
           ].map((c) => (

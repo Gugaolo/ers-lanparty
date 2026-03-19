@@ -2,6 +2,7 @@ import Link from 'next/link';
 import TeamEditor from '../TeamEditor';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
 import { getRole } from '@/lib/auth/getRole';
+import { TEAM_REGISTRATION_OPEN, TEAM_REGISTRATION_STATUS } from '@/lib/teamRegistration';
 
 type GameRow = {
   id: number;
@@ -86,7 +87,15 @@ export default async function EditTeamPage({
             Za urejanje ekipe se prijavi v profil (zgoraj desno).
           </div>
         ) : selectedGroup ? (
-          <TeamEditor team={selectedGroup} games={gameOptions} isAdminView={isAdmin} />
+          <>
+            {!TEAM_REGISTRATION_OPEN && !isAdmin && (
+              <div className="mb-6 rounded-lg border border-amber-300/30 bg-amber-300/10 px-4 py-4 text-sm text-amber-50">
+                <span className="font-semibold">{TEAM_REGISTRATION_STATUS.title}.</span>{' '}
+                Urejanje obstoječe ekipe ostaja omogočeno.
+              </div>
+            )}
+            <TeamEditor team={selectedGroup} games={gameOptions} isAdminView={isAdmin} />
+          </>
         ) : (
           <div className="rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
             {isAdmin ? (
@@ -99,11 +108,20 @@ export default async function EditTeamPage({
               </>
             ) : (
               <>
-                S tem profilom se ni prijavljene ekipe.{' '}
-                <Link href="/prijava" className="font-semibold underline">
-                  Prijavi ekipo
-                </Link>{' '}
-                in se vrni na to stran za urejanje.
+                {TEAM_REGISTRATION_OPEN ? (
+                  <>
+                    S tem profilom se ni prijavljene ekipe.{' '}
+                    <Link href="/prijava" className="font-semibold underline">
+                      Prijavi ekipo
+                    </Link>{' '}
+                    in se vrni na to stran za urejanje.
+                  </>
+                ) : (
+                  <>
+                    S tem profilom se ni prijavljene ekipe. Nove prijave so zaprte, zato je
+                    tukaj mogoče urejati samo že dodane ekipe.
+                  </>
+                )}
               </>
             )}
           </div>

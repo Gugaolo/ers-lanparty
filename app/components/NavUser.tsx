@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { TEAM_REGISTRATION_OPEN } from "@/lib/teamRegistration";
 
 type UserPreview = {
   email: string | null;
@@ -40,12 +41,14 @@ export default function NavUser() {
   if (user) {
     return (
       <div className="flex items-center gap-2">
-        <Link
-          href="/prijava"
-          className="rounded-md px-3 py-2 text-sm font-semibold text-white hover:bg-white/10"
-        >
-          Prijava ekipe
-        </Link>
+        {TEAM_REGISTRATION_OPEN ? (
+          <Link
+            href="/prijava"
+            className="rounded-md px-3 py-2 text-sm font-semibold text-white hover:bg-white/10"
+          >
+            Prijava ekipe
+          </Link>
+        ) : null}
         <Link
           href="/profile"
           className="rounded-md border border-white/25 bg-white/10 px-3 py-2 text-sm font-semibold text-white/90 hover:bg-white/20"

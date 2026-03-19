@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabaseServerClient';
 import React from 'react';
 import Header from '../components/header';
+import { TEAM_REGISTRATION_OPEN, TEAM_REGISTRATION_STATUS } from '@/lib/teamRegistration';
 
 const COLORS = {
   primary: '#00F6FF',
@@ -90,10 +91,16 @@ export default async function TeamsPage() {
         <h1 className="text-4xl font-extrabold leading-tight">
           LAN Party <span style={{ color: COLORS.accent }}>ERS SCV</span>
         </h1>
-        <p className="mt-2 text-white/80">Seznam prijavljenih ekip in clanov.</p>
+        <p className="mt-2 text-white/80">Seznam prijavljenih ekip in članov.</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
+        {!TEAM_REGISTRATION_OPEN && (
+          <div className="mb-6 rounded-lg border border-amber-300/30 bg-amber-300/10 px-4 py-4 text-sm text-amber-50">
+            <span className="font-semibold">{TEAM_REGISTRATION_STATUS.title}.</span>{' '}
+            {TEAM_REGISTRATION_STATUS.detail}
+          </div>
+        )}
         <div className="overflow-x-auto rounded-2xl border border-white/15 bg-white/5 backdrop-blur">
           <table className="min-w-full divide-y divide-white/10">
             <thead className="bg-white/10">
@@ -179,7 +186,7 @@ export default async function TeamsPage() {
 
         {myGroup && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
-            Urejas lahko samo svojo ekipo. Klikni{' '}
+            Urejaš lahko samo svojo ekipo. Klikni{' '}
             <Link href="/teams/edit" className="font-semibold underline">
               Uredi ekipo
             </Link>{' '}
@@ -195,11 +202,17 @@ export default async function TeamsPage() {
 
         {userId && !myGroup && (
           <div className="mt-6 rounded-lg border border-white/15 bg-white/5 px-4 py-4 text-sm text-white/80">
-            S tem profilom se ni prijavljene ekipe.{' '}
-            <Link href="/prijava" className="font-semibold underline">
-              Prijavi ekipo
-            </Link>{' '}
-            in jo bos lahko urejal na strani za urejanje.
+            {TEAM_REGISTRATION_OPEN ? (
+              <>
+                S tem profilom se ni prijavljene ekipe.{' '}
+                <Link href="/prijava" className="font-semibold underline">
+                  Prijavi ekipo
+                </Link>{' '}
+                in jo boš lahko urejal na strani za urejanje.
+              </>
+            ) : (
+              <>S tem profilom se ni prijavljene ekipe. Nove prijave so trenutno zaprte.</>
+            )}
           </div>
         )}
 
